@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Gem::Specification.new do |spec|
   spec.name          = 'measure_repository_service_test_kit'
   spec.version       = '0.0.1'

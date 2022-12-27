@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe MeasureRepositoryServiceTestKit::PatientGroup do
   let(:suite) { Inferno::Repositories::TestSuites.new.find('measure_repository_service_test_kit') }
   let(:group) { suite.groups[1] }
@@ -10,9 +12,9 @@ RSpec.describe MeasureRepositoryServiceTestKit::PatientGroup do
     test_run_params = { test_session_id: test_session.id }.merge(runnable.reference_hash)
     test_run = Inferno::Repositories::TestRuns.new.create(test_run_params)
     inputs.each do |name, value|
-      session_data_repo.save(test_session_id: test_session.id, name: name, value: value, type: 'text')
+      session_data_repo.save(test_session_id: test_session.id, name:, value:, type: 'text')
     end
-    Inferno::TestRunner.new(test_session: test_session, test_run: test_run).run(runnable)
+    Inferno::TestRunner.new(test_session:, test_run:).run(runnable)
   end
 
   describe 'read test' do
@@ -24,7 +26,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::PatientGroup do
       stub_request(:get, "#{url}/Patient/#{patient_id}")
         .to_return(status: 200, body: resource.to_json)
 
-      result = run(test, url: url, patient_id: patient_id)
+      result = run(test, url:, patient_id:)
 
       expect(result.result).to eq('pass')
     end
@@ -34,7 +36,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::PatientGroup do
       stub_request(:get, "#{url}/Patient/#{patient_id}")
         .to_return(status: 201, body: resource.to_json)
 
-      result = run(test, url: url, patient_id: patient_id)
+      result = run(test, url:, patient_id:)
 
       expect(result.result).to eq('fail')
       expect(result.result_message).to match(/200/)
@@ -45,7 +47,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::PatientGroup do
       stub_request(:get, "#{url}/Patient/#{patient_id}")
         .to_return(status: 200, body: resource.to_json)
 
-      result = run(test, url: url, patient_id: patient_id)
+      result = run(test, url:, patient_id:)
 
       expect(result.result).to eq('fail')
       expect(result.result_message).to match(/Patient/)
@@ -56,7 +58,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::PatientGroup do
       stub_request(:get, "#{url}/Patient/#{patient_id}")
         .to_return(status: 200, body: resource.to_json)
 
-      result = run(test, url: url, patient_id: patient_id)
+      result = run(test, url:, patient_id:)
 
       expect(result.result).to eq('fail')
       expect(result.result_message).to match(/resource with id/)

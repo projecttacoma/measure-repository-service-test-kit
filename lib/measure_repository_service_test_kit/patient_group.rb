@@ -1,4 +1,7 @@
-module MeasureRepositoryServiceTestKit 
+# frozen_string_literal: true
+
+module MeasureRepositoryServiceTestKit
+  # Example Patient group test suite
   class PatientGroup < Inferno::TestGroup
     title 'Patient  Tests'
     description 'Verify that the server makes Patient resources available'

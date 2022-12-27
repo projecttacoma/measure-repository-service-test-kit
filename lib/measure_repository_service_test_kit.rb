@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 require_relative 'measure_repository_service_test_kit/patient_group'
 
 module MeasureRepositoryServiceTestKit
+  # Overall test suite
   class Suite < Inferno::TestSuite
     id :measure_repository_service_test_kit
     title 'Measure Repository Service Test Suite'
@@ -20,7 +23,7 @@ module MeasureRepositoryServiceTestKit
       url :url
       oauth_credentials :credentials
     end
- 
+
     # All FHIR validation requsets will use this FHIR validator
     validator do
       url ENV.fetch('VALIDATOR_URL')
