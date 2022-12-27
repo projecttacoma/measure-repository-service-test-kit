@@ -1,10 +1,9 @@
-version: '3'
+version: "3"
 services:
   validator_service:
     image: infernocommunity/fhir-validator-service
-    # Update this path to match your directory structure
     volumes:
-      - ./lib/inferno_template/igs:/home/igs
+      - ./lib/measure-repository-service-test-kit/igs:/home/igs
   fhir_validator_app:
     image: infernocommunity/fhir-validator-app
     depends_on:
@@ -18,7 +17,7 @@ services:
       - ./config/nginx.background.conf:/etc/nginx/nginx.conf
     ports:
       - "80:80"
-    command: [nginx, '-g', 'daemon off;']
+    command: [nginx, "-g", "daemon off;"]
     depends_on:
       - fhir_validator_app
   redis:
