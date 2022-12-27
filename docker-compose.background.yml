@@ -3,7 +3,7 @@ services:
   validator_service:
     image: infernocommunity/fhir-validator-service
     volumes:
-      - ./lib/measure-repository-service-test-kit/igs:/home/igs
+      - ./lib/measure_repository_service_test_kit/igs:/home/igs
   fhir_validator_app:
     image: infernocommunity/fhir-validator-app
     depends_on:
