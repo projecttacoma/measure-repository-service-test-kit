@@ -1,5 +1,5 @@
 Gem::Specification.new do |spec|
-  spec.name          = 'measure-repository-service-test-kit'
+  spec.name          = 'measure_repository_service_test_kit'
   spec.version       = '0.0.1'
   spec.authors       = ['Abacus-FHIR Team']
   spec.email         = ['tacoma-fhir-prototyping@groups.mitre.org']
