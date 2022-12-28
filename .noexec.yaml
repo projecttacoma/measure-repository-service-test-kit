@@ -1,0 +1,3 @@
+# .noexec.yaml
+
+exclude: [inferno]

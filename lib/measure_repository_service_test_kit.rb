@@ -1,10 +1,11 @@
-require_relative 'inferno_template/patient_group'
+# frozen_string_literal: true
 
-module InfernoTemplate
+module MeasureRepositoryServiceTestKit
+  # Overall test suite
   class Suite < Inferno::TestSuite
-    id :test_suite_template
-    title 'Inferno Test Suite Template'
-    description 'A basic test suite template for Inferno'
+    id :measure_repository_service_test_kit
+    title 'Measure Repository Service Test Suite'
+    description 'A set of tests for Measure Repository Service\'s operations and resources'
 
     # These inputs will be available to all tests in this suite
     input :url,
@@ -45,9 +46,5 @@ module InfernoTemplate
         end
       end
     end
-
-    # Tests and TestGroups can be written in separate files and then included
-    # using their id
-    group from: :patient_group
   end
 end
