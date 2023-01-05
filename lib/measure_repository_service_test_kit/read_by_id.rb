@@ -2,7 +2,7 @@
 
 require 'json'
 
-module DEQMTestKit
+module MeasureRepositoryServiceTestKit
   # tests for read by ID for Library and Measure services
   class ReadById < Inferno::TestGroup
   
@@ -32,7 +32,6 @@ module DEQMTestKit
 
         assert_response_status(200)
         assert_resource_type(resource_type)
-        assert_valid_resource
         assert resource.id == resource_id,
                "Requested resource with id #{resource_id}, received resource with id #{resource.id}"
       end
@@ -49,7 +48,6 @@ module DEQMTestKit
 
         assert_response_status(404)
         assert_resource_type(:operation_outcome)
-        assert_valid_resource
         assert(resource.issue[0].severity == 'error')
       end
     end

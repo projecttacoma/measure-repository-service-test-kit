@@ -4,7 +4,7 @@ require_relative 'measure_repository_service_test_kit/read_by_id'
 module MeasureRepositoryServiceTestKit
   # Overall test suite
   class Suite < Inferno::TestSuite
-    id :measure_repository_service_test_kit
+    id :measure_repository_service_test_suite
     title 'Measure Repository Service Test Suite'
     description 'A set of tests for Measure Repository Service\'s operations and resources'
 
