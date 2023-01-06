@@ -5,7 +5,6 @@ require 'json'
 module MeasureRepositoryServiceTestKit
   # tests for read by ID for Library and Measure services
   class ReadById < Inferno::TestGroup
-  
     title 'Read by id'
     description 'Ensure measure repository service can retrieve Measure and Library resources by the server-defined id'
     id 'read_by_id'
@@ -14,9 +13,10 @@ module MeasureRepositoryServiceTestKit
       url :url
     end
 
-    resource_type_options = { list_options: [{label: 'Measure', value: 'Measure'}, {label: 'Library', value: 'Library'}]}
+    resource_type_options = { list_options: [{ label: 'Measure', value: 'Measure' },
+                                             { label: 'Library', value: 'Library' }] }
     resource_type_args = { type: 'radio', optional: false, default: 'Measure', options: resource_type_options,
-                        title: 'Resource Type' }
+                           title: 'Resource Type' }
 
     INVALID_ID = 'INVALID_ID'
 
@@ -39,8 +39,9 @@ module MeasureRepositoryServiceTestKit
 
     test do
       title 'Server returns 404 response status when the resource is not available on the server'
-      id 'read-by-id-01'
-      description %(This test verifies that the server appropriately returns 404 response status for a resource whose id cannot be found in the server's database.)
+      id 'read-by-id-02'
+      description %(This test verifies that the server appropriately returns 404 response status
+                  for a resource whose id cannot be found in the server's database.)
       input :resource_type, **resource_type_args
 
       run do
