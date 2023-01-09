@@ -20,9 +20,9 @@ RSpec.describe MeasureRepositoryServiceTestKit::ReadById do
   describe 'Server successfully retrieves specified resource by its id' do
     let(:test) { group.tests.first }
     let(:resource_id) { 'measure_id' }
-    let(:resource_type) { 'Measure' }
 
-    it 'passes if a resource of the specified resource type was received' do
+    it 'passes if a Measure resource with the specified id was received' do
+      resource_type = 'Measure'
       resource = FHIR::Measure.new(id: resource_id)
       stub_request(
         :get,
@@ -33,7 +33,20 @@ RSpec.describe MeasureRepositoryServiceTestKit::ReadById do
       expect(result.result).to eq('pass')
     end
 
+    it 'passes if a Library resource with the specified id was received' do
+      resource_type = 'Library'
+      resource = FHIR::Library.new(id: resource_id)
+      stub_request(
+        :get,
+        "#{url}/#{resource_type}/#{resource_id}"
+      ).to_return(status: 200, body: resource.to_json)
+
+      result = run(test, url:, resource_type:, resource_id:)
+      expect(result.result).to eq('pass')
+    end
+
     it 'fails if read interaction does not return 200' do
+      resource_type = 'Measure'
       resource = FHIR::Measure.new(id: resource_id)
       stub_request(
         :get,
@@ -44,6 +57,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::ReadById do
     end
 
     it 'fails if the id received does not match the one requested' do
+      resource_type = 'Measure'
       resource = FHIR::Measure.new(id: 'INVALID_ID')
       stub_request(
         :get,
