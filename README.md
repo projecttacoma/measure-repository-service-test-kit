@@ -38,6 +38,7 @@ docker for development if possible.
 - Navigate to `http://localhost` to access Inferno, where your test suite will
   be available. To access the FHIR resource validator, navigate to
   `http://localhost/validator`.
+- To connect to a service running locally on your machine, use `host.docker.internal` as the hostname
 
 ### Development with ruby
 It is highly recommended that you install ruby via a [ruby version
