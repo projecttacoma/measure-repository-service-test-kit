@@ -44,7 +44,6 @@ module MeasureRepositoryServiceTestKit
 
         run do
           fhir_get_capability_statement
-
           assert_response_status(200)
           assert_resource_type(:capability_statement)
         end
