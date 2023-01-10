@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'measure_repository_service_test_kit/read_by_id'
+require_relative 'measure_repository_service_test_kit/measure_group'
+require_relative 'measure_repository_service_test_kit/library_group'
 module MeasureRepositoryServiceTestKit
   # Overall test suite
   class Suite < Inferno::TestSuite
@@ -49,6 +50,7 @@ module MeasureRepositoryServiceTestKit
     end
 
     # Tests and TestGroups from separate files (included using their id)
-    group from: :read_by_id
+    group from: :measure_group
+    group from: :library_group
   end
 end
