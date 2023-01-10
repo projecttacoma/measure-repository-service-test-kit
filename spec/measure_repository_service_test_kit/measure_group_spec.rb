@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../utils/spec_utils'
+
 RSpec.describe MeasureRepositoryServiceTestKit::MeasureRepositoryServiceMeasureGroup do
   let(:suite) { Inferno::Repositories::TestSuites.new.find('measure_repository_service_test_suite') }
   let(:group) { suite.groups[1] }
@@ -7,15 +9,6 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureRepositoryServiceMeasureG
   let(:test_session) { repo_create(:test_session, test_suite_id: suite.id) }
   let(:url) { 'http://example.com/fhir' }
   let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
-
-  def run(runnable, inputs = {})
-    test_run_params = { test_session_id: test_session.id }.merge(runnable.reference_hash)
-    test_run = Inferno::Repositories::TestRuns.new.create(test_run_params)
-    inputs.each do |name, value|
-      session_data_repo.save(test_session_id: test_session.id, name:, value:, type: 'text')
-    end
-    Inferno::TestRunner.new(test_session:, test_run:).run(runnable)
-  end
 
   describe 'Server successfully retrieves specified resource by its id' do
     let(:test) { group.tests.first }
