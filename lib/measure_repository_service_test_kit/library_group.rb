@@ -26,6 +26,7 @@ module MeasureRepositoryServiceTestKit
 
         assert_response_status(200)
         assert_resource_type(:library)
+        assert_valid_json(response[:body])
         assert resource.id == library_id,
                "Requested resource with id #{library_id}, received resource with id #{resource.id}"
       end
@@ -42,6 +43,7 @@ module MeasureRepositoryServiceTestKit
 
         assert_response_status(404)
         assert_resource_type(:operation_outcome)
+        assert_valid_json(response[:body])
         assert(resource.issue[0].severity == 'error')
       end
     end

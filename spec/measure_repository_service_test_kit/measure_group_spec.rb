@@ -51,6 +51,16 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureRepositoryServiceMeasureG
       result = run(test, url:, measure_id:)
       expect(result.result).to eq('fail')
     end
+
+    it 'fails if the resource type received does not match the one requested' do
+      resource = FHIR::Library.new(id: 'INVALID_ID')
+      stub_request(
+        :get,
+        "#{url}/Measure/#{measure_id}"
+      ).to_return(status: 200, body: resource.to_json)
+      result = run(test, url:, measure_id:)
+      expect(result.result).to eq('fail')
+    end
   end
 
   describe 'Server returns 404 for id that does not exist on server database' do
