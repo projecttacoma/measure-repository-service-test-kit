@@ -29,9 +29,38 @@ module MeasureRepositoryServiceTestKit
       end
     end
 
-    def measure_in_bundle(measure_iden, iden_type, bundle)
-      bundle.entry.any? do |e|
+    def retrieve_measure_from_bundle(measure_iden, iden_type, bundle)
+      entry = bundle.entry.find do |e|
         e.resource.resourceType == 'Measure' && e.resource.send(iden_type) == measure_iden
+      end
+      return unless entry
+
+      entry.resource
+    end
+
+    def measure_has_identifier(measure, identifier)
+      iden_split = identifier.split('|')
+      value = nil
+      sys = nil
+      if iden_split.length == 1
+        value = iden_split[0]
+      elsif iden_split[0] == ''
+        value = iden_split[1]
+      elsif iden_split[1] == ''
+        sys = iden_split[0]
+      else
+        sys = iden_split[0]
+        value = iden_split[1]
+      end
+      puts sys
+      puts value
+      measure.identifier.any? do |iden|
+        puts iden.system
+        puts iden.value
+        does_match = true
+        does_match &&= iden.value == value if !iden.value.nil? && value
+        does_match &&= iden.system == sys if !iden.system.nil? && sys
+        does_match
       end
     end
   end
