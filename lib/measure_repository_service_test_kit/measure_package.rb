@@ -20,7 +20,7 @@ module MeasureRepositoryServiceTestKit
       title '200 response and JSON Bundle body for POST by id in url'
       id 'measure-package-01'
       description 'returned response has status code 200 and valid JSON FHIR Bundle in body'
-      input :measure_id , title: 'Measure id' 
+      input :measure_id, title: 'Measure id'
       makes_request :measure_package
       run do
         fhir_operation("Measure/#{measure_id}/$package", name: :measure_package)
@@ -37,9 +37,9 @@ module MeasureRepositoryServiceTestKit
       title '200 response and JSON Bundle body for POST by url, identifier, and version in body'
       id 'measure-package-02'
       description 'returned response has status code 200 and included Measure matches url, identifier, and version'
-      input :measure_url, title: 'Measure url' 
-      input :measure_identifier, title: 'Measure identifier' 
-      input :measure_version, title: 'Measure version' 
+      input :measure_url, title: 'Measure url'
+      input :measure_identifier, title: 'Measure identifier'
+      input :measure_version, title: 'Measure version'
 
       run do
         params_hash = {
@@ -71,7 +71,7 @@ module MeasureRepositoryServiceTestKit
       title 'All related artifacts present'
       id 'measure-package-03'
       description 'returned bundle includes all related artifacts for all libraries'
-      input :measure_id, title: 'Measure id' 
+      input :measure_id, title: 'Measure id'
       uses_request :measure_package
       run do
         assert(related_artifacts_present?(resource))

@@ -61,7 +61,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
       expect(result.result).to eq('fail')
     end
   end
-  
+
   describe 'Server successfully returns bundle on Measure $package with url, identifier, and version in body' do
     let(:test) { group.tests[1] }
     let(:measure_id) { 'measure_id' }
