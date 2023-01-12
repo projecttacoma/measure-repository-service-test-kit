@@ -20,6 +20,7 @@ module MeasureRepositoryServiceTestKit
       id 'read-by-id-measure-01'
       description %(This test verifies that the Measure resource can be read from the server.)
       input :measure_id, title: 'Measure id'
+      output :measure_id
 
       run do
         fhir_read(:measure, measure_id)
