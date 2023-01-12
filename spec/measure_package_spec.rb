@@ -184,6 +184,11 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
       result = run(test, url:, selected_measure_id:)
       expect(result.result).to eq('fail')
     end
+
+    it 'skips if measure_package request has not been made' do
+      result = run(test, url:, selected_measure_id:)
+      expect(result.result).to eq('skip')
+    end
   end
   describe 'Server returns 404 when no measure matches id' do
     let(:test) { group.tests[3] }
