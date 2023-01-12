@@ -15,6 +15,7 @@ module MeasureRepositoryServiceTestKit
     fhir_client do
       url :url
     end
+
     test do
       title '200 response and JSON Bundle body for POST by id in url'
       id 'measure-package-01'
@@ -31,6 +32,7 @@ module MeasureRepositoryServiceTestKit
       end
     end
 
+    # rubocop:disable Metrics/BlockLength
     test do
       title '200 response and JSON Bundle body for POST by url, identifier, and version in body'
       id 'measure-package-02'
@@ -59,10 +61,11 @@ module MeasureRepositoryServiceTestKit
         assert_valid_json(response[:body])
         measure = retrieve_measure_from_bundle(selected_measure_url, 'url', resource)
         assert(!measure.nil?)
-        assert(measure_has_identifier(measure, selected_measure_identifier))
+        assert(measure_has_identifier?(measure, selected_measure_identifier))
         assert(measure.version == selected_measure_version)
       end
     end
+    # rubocop:enable Metrics/BlockLength
 
     test do
       title 'All related artifacts present'
@@ -71,7 +74,7 @@ module MeasureRepositoryServiceTestKit
       input :selected_measure_id
       uses_request :measure_package
       run do
-        assert(related_artifacts_present(resource))
+        assert(related_artifacts_present?(resource))
       end
     end
 

@@ -146,26 +146,45 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
     end
   end
 
-  #   describe 'Server successfully returns all referenced Library related artifacts' do
-  #     let(:test) { group.tests[2] }
-  #     let(:selected_measure_id) { 'measure_id' }
-  #     let(:measure) { FHIR::Measure.new(id: selected_measure_id, library: ['test-Library']) }
-  #     let(:library) do
-  #       FHIR::Library.new(url: 'test-Library', relatedArtifact: [{ type: 'depends-on', resource: 'dep-Library' }])
-  #     end
-  #     let(:dep_library) { FHIR::Library.new(url: 'dep-Library') }
-  #     it 'passes if all related artifacts are present' do
-  #       bundle = FHIR::Bundle.new(total: 3,
-  #                                 entry: [{ resource: measure }, { resource: library },
-  #                                         { resource: dep_library }])
-  #       stub_request(
-  #         :post,
-  #         "#{url}/Measure/#{selected_measure_id}/$package"
-  #       ).to_return(status: 200, body: bundle.to_json)
-  #       result = run(test, url:, selected_measure_id:, uses_request:)
-  #       expect(result.result).to eq('pass')
-  #     end
-  #   end
+  describe 'Server successfully returns all referenced Library related artifacts' do
+    let(:test) { group.tests[2] }
+    let(:selected_measure_id) { 'measure_id' }
+    let(:measure) { FHIR::Measure.new(id: selected_measure_id, library: ['test-Library']) }
+    let(:library) do
+      FHIR::Library.new(url: 'test-Library', relatedArtifact: [{ type: 'depends-on', resource: 'dep-Library' }])
+    end
+    let(:dep_library) { FHIR::Library.new(url: 'dep-Library') }
+    it 'passes if all related artifacts are present' do
+      bundle = FHIR::Bundle.new(total: 3,
+                                entry: [{ resource: measure }, { resource: library },
+                                        { resource: dep_library }])
+      repo_create(
+        :request,
+        name: 'measure_package',
+        url: "http://example.com/Measure/#{selected_measure_id}/$package",
+        test_session_id: test_session.id,
+        status: 200,
+        response_body: bundle.to_json
+      )
+      result = run(test, url:, selected_measure_id:)
+      expect(result.result).to eq('pass')
+    end
+
+    it 'fails if related artifacts are missing' do
+      bundle = FHIR::Bundle.new(total: 2,
+                                entry: [{ resource: measure }, { resource: library }])
+      repo_create(
+        :request,
+        name: 'measure_package',
+        url: "http://example.com/Measure/#{selected_measure_id}/$package",
+        test_session_id: test_session.id,
+        status: 200,
+        response_body: bundle.to_json
+      )
+      result = run(test, url:, selected_measure_id:)
+      expect(result.result).to eq('fail')
+    end
+  end
   describe 'Server returns 404 when no measure matches id' do
     let(:test) { group.tests[3] }
     let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
