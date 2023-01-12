@@ -4,7 +4,7 @@ require 'json'
 
 module MeasureRepositoryServiceTestKit
   # tests for read by ID and search for Measure service
-  class MeasureRepositoryServiceMeasureGroup < Inferno::TestGroup
+  class MeasureGroup < Inferno::TestGroup
     title 'Measure Repository Service Measure Group'
     description 'Ensure measure repository service can retrieve Measure resources by the server-defined id and search'
     id 'measure_group'

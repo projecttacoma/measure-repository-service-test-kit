@@ -2,7 +2,7 @@
 
 require_relative '../utils/spec_utils'
 
-RSpec.describe MeasureRepositoryServiceTestKit::MeasureRepositoryServiceMeasureGroup do
+RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
   let(:suite) { Inferno::Repositories::TestSuites.new.find('measure_repository_service_test_suite') }
   let(:group) { suite.groups[1] }
   let(:session_data_repo) { Inferno::Repositories::SessionData.new }
