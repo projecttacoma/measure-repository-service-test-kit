@@ -17,9 +17,9 @@ module MeasureRepositoryServiceTestKit
     end
 
     test do
-      title '200 response and JSON Bundle body for POST by id in url'
+      title '200 response and JSON Bundle body including Measure resource for POST by id in url'
       id 'measure-package-01'
-      description 'returned response has status code 200 and valid JSON FHIR Bundle in body'
+      description 'returned response has status code 200 and valid JSON FHIR Bundle including Measure resource in body'
       input :measure_id, title: 'Measure id'
       makes_request :measure_package
       run do
@@ -28,15 +28,16 @@ module MeasureRepositoryServiceTestKit
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
         measure = retrieve_measure_from_bundle(measure_id, 'id', resource)
-        assert(!measure.nil?)
+        assert(!measure.nil?, "No measure found in bundle with id: #{measure_id}")
       end
     end
 
     # rubocop:disable Metrics/BlockLength
     test do
-      title '200 response and JSON Bundle body for POST by url, identifier, and version in body'
+      title '200 response and JSON Bundle body for POST parameters url, identifier, and version in body'
       id 'measure-package-02'
-      description 'returned response has status code 200 and included Measure matches url, identifier, and version'
+      description 'returned response has status code 200 and included Measure matches parameters url,
+      identifier, and version. Verifies the server supports SHALL parameters for the operation'
       input :measure_url, title: 'Measure url'
       input :measure_identifier, title: 'Measure identifier'
       input :measure_version, title: 'Measure version'
@@ -52,7 +53,7 @@ module MeasureRepositoryServiceTestKit
             { name: 'version',
               valueString: measure_version }
           ]
-        }
+        }.freeze
         params = FHIR::Parameters.new params_hash
 
         fhir_operation('Measure/$package', body: params)
@@ -61,7 +62,7 @@ module MeasureRepositoryServiceTestKit
         assert_valid_json(response[:body])
         measure = retrieve_measure_from_bundle(measure_url, 'url', resource)
         assert(!measure.nil?)
-        assert(measure_has_identifier?(measure, measure_identifier))
+        assert(measure_has_matching_identifier?(measure, measure_identifier))
         assert(measure.version == measure_version)
       end
     end
@@ -95,7 +96,7 @@ module MeasureRepositoryServiceTestKit
     test do
       title 'Throws 400 when no id, url, or identifier provided'
       id 'measure-package-05'
-      description 'returns 400 status code with OperationOutcome when no id or url provided'
+      description 'returns 400 status code with OperationOutcome when no id, url, or identifier provided'
 
       run do
         fhir_operation('Measure/$package')

@@ -148,6 +148,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
       FHIR::Library.new(url: 'test-Library', relatedArtifact: [{ type: 'depends-on', resource: 'dep-Library' }])
     end
     let(:dep_library) { FHIR::Library.new(url: 'dep-Library') }
+
     it 'passes if all related artifacts are present' do
       bundle = FHIR::Bundle.new(total: 3,
                                 entry: [{ resource: measure }, { resource: library },
@@ -222,7 +223,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
     let(:test) { group.tests[4] }
     let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
 
-    it 'passes when 404 returned with OperationOutcome' do
+    it 'passes when 400 returned with OperationOutcome' do
       stub_request(
         :post,
         "#{url}/Measure/$package"

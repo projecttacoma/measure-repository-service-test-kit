@@ -46,7 +46,7 @@ module MeasureRepositoryServiceTestKit
     end
 
     # rubocop:disable Metrics/CyclomaticComplexity
-    def measure_has_identifier?(measure, identifier)
+    def measure_has_matching_identifier?(measure, identifier)
       sys, value = split_identifier(identifier)
       measure.identifier.any? do |iden|
         does_match = true
