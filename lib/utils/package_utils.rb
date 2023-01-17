@@ -36,14 +36,23 @@ module MeasureRepositoryServiceTestKit
       end
     end
 
+    # rubocop:disable Metrics/MethodLength
     def retrieve_measure_from_bundle(measure_iden, iden_type, bundle)
-      entry = bundle.entry.find do |e|
-        e.resource.resourceType == 'Measure' && e.resource.send(iden_type) == measure_iden
-      end
+      entry =
+        bundle.entry.find do |e|
+          if e.resource.resourceType == 'Measure'
+            if iden_type == 'identifier'
+              measure_has_matching_identifier?(e.resource, measure_iden)
+            else
+              e.resource.send(iden_type) == measure_iden
+            end
+          end
+        end
       return unless entry
 
       entry.resource
     end
+    # rubocop:enable Metrics/MethodLength
 
     # rubocop:disable Metrics/CyclomaticComplexity
     def measure_has_matching_identifier?(measure, identifier)

@@ -62,8 +62,125 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
     end
   end
 
-  describe 'Server successfully returns bundle on Measure $package with url, identifier, and version in body' do
+  describe 'Server successfully returns bundle on Measure $package with url in body' do
     let(:test) { group.tests[1] }
+    let(:measure_url) { 'measure_url' }
+
+    it 'passes if a 200 is returned with bundle body and url matches' do
+      measure = FHIR::Measure.new(url: measure_url)
+      bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
+
+      stub_request(
+        :post,
+        "#{url}/Measure/$package"
+      ).to_return(status: 200, body: bundle.to_json)
+      result = run(test, url:, measure_url:)
+      expect(result.result).to eq('pass')
+    end
+
+    it 'fails if a 200 is not returned' do
+      measure = FHIR::Measure.new(url: measure_url)
+      bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
+      stub_request(
+        :post,
+        "#{url}/Measure/$package"
+      ).to_return(status: 400, body: bundle.to_json)
+
+      result = run(test, url:, measure_url:)
+      expect(result.result).to eq('fail')
+    end
+
+    it 'fails if body is not a Bundle' do
+      measure = FHIR::Measure.new(url: measure_url)
+      stub_request(
+        :post,
+        "#{url}/Measure/$package"
+      ).to_return(status: 400, body: measure.to_json)
+
+      result = run(test, url:, measure_url:)
+      expect(result.result).to eq('fail')
+    end
+
+    it 'fails if Measure in returned bundle does not match url' do
+      measure = FHIR::Measure.new(url: 'http://example.com/invalid')
+      bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
+      stub_request(
+        :post,
+        "#{url}/Measure/$package"
+      ).to_return(status: 200, body: bundle.to_json)
+
+      result = run(test, url:, measure_url:)
+      expect(result.result).to eq('fail')
+    end
+  end
+
+  describe 'Server successfully returns bundle on Measure $package with identifier in body' do
+    let(:test) { group.tests[2] }
+    let(:measure_identifier) { 'identifier_system|identifier_value' }
+    let(:expected_identifier) { { system: 'identifier_system', value: 'identifier_value' } }
+
+    it 'passes if a 200 is returned with bundle body and identifier matches' do
+      measure = FHIR::Measure.new(identifier: expected_identifier)
+      bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
+
+      stub_request(
+        :post,
+        "#{url}/Measure/$package"
+      ).to_return(status: 200, body: bundle.to_json)
+      result = run(test, url:, measure_identifier:)
+      expect(result.result).to eq('pass')
+    end
+
+    it 'fails if a 200 is not returned' do
+      measure = FHIR::Measure.new(identifier: expected_identifier)
+      bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
+      stub_request(
+        :post,
+        "#{url}/Measure/$package"
+      ).to_return(status: 400, body: bundle.to_json)
+
+      result = run(test, url:, measure_identifier:)
+      expect(result.result).to eq('fail')
+    end
+
+    it 'fails if body is not a Bundle' do
+      measure = FHIR::Measure.new(identifier: expected_identifier)
+      stub_request(
+        :post,
+        "#{url}/Measure/$package"
+      ).to_return(status: 400, body: measure.to_json)
+
+      result = run(test, url:, measure_identifier:)
+      expect(result.result).to eq('fail')
+    end
+
+    it 'fails if Measure in returned bundle does not match identifier system' do
+      measure = FHIR::Measure.new(identifier: { system: 'invalid_system', value: 'identifier_value' })
+      bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
+      stub_request(
+        :post,
+        "#{url}/Measure/$package"
+      ).to_return(status: 200, body: bundle.to_json)
+
+      result = run(test, url:, measure_identifier:)
+      expect(result.result).to eq('fail')
+    end
+
+    it 'fails if Measure in returned bundle does not match identifier value' do
+      measure = FHIR::Measure.new(identifier: { system: 'identifier_system', value: 'invalid_value' })
+      bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
+      stub_request(
+        :post,
+        "#{url}/Measure/$package"
+      ).to_return(status: 200, body: bundle.to_json)
+
+      result = run(test, url:, measure_identifier:)
+      expect(result.result).to eq('fail')
+    end
+  end
+
+  describe 'Server successfully returns bundle on Measure $package with url, identifier, and version in body' do
+    let(:test) { group.tests[3] }
     let(:measure_id) { 'measure_id' }
     let(:measure_identifier) { 'identifier_system|identifier_value' }
     let(:measure_url) { 'measure_url' }
@@ -71,77 +188,91 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
     let(:expected_identifier) { { system: 'identifier_system', value: 'identifier_value' } }
 
     it 'passes if a 200 is returned with bundle body and all fields match' do
-      measure = FHIR::Measure.new(url: measure_url, identifier: expected_identifier,
+      measure = FHIR::Measure.new(id: measure_id, url: measure_url, identifier: expected_identifier,
                                   version: measure_version)
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
 
       stub_request(
         :post,
-        "#{url}/Measure/$package"
+        "#{url}/Measure/#{measure_id}/$package"
       ).to_return(status: 200, body: bundle.to_json)
-      result = run(test, url:, measure_url:, measure_identifier:, measure_version:)
+      result = run(test, url:, measure_id:, measure_url:, measure_identifier:, measure_version:)
       expect(result.result).to eq('pass')
     end
 
     it 'fails if a 200 is returned with bundle body but url does not match' do
-      measure = FHIR::Measure.new(url: measure_url, identifier: expected_identifier,
+      measure = FHIR::Measure.new(id: 'invalid_id', url: measure_url, identifier: expected_identifier,
                                   version: measure_version)
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
 
       stub_request(
         :post,
-        "#{url}/Measure/$package"
+        "#{url}/Measure/#{measure_id}/$package"
       ).to_return(status: 200, body: bundle.to_json)
-      result = run(test, url:, measure_url: 'invalid_url', measure_identifier:,
+      result = run(test, url:, measure_id:, measure_url:, measure_identifier:,
+                         measure_version:)
+      expect(result.result).to eq('fail')
+    end
+
+    it 'fails if a 200 is returned with bundle body but url does not match' do
+      measure = FHIR::Measure.new(id: measure_id, url: 'invalid_url', identifier: expected_identifier,
+                                  version: measure_version)
+      bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
+
+      stub_request(
+        :post,
+        "#{url}/Measure/#{measure_id}/$package"
+      ).to_return(status: 200, body: bundle.to_json)
+      result = run(test, url:, measure_id:, measure_url:, measure_identifier:,
                          measure_version:)
       expect(result.result).to eq('fail')
     end
 
     it 'fails if a 200 is returned with bundle body but version does not match' do
-      measure = FHIR::Measure.new(url: measure_url, identifier: expected_identifier,
-                                  version: measure_version)
+      measure = FHIR::Measure.new(id: measure_id, url: measure_url, identifier: expected_identifier,
+                                  version: 'invalid_version')
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
 
       stub_request(
         :post,
-        "#{url}/Measure/$package"
+        "#{url}/Measure/#{measure_id}/$package"
       ).to_return(status: 200, body: bundle.to_json)
-      result = run(test, url:, measure_url:, measure_identifier:,
-                         measure_version: 'invalid_version')
+      result = run(test, url:, measure_id:, measure_url:, measure_identifier:,
+                         measure_version:)
       expect(result.result).to eq('fail')
     end
 
     it 'fails if a 200 is returned with bundle body but identifier system does not match' do
-      measure = FHIR::Measure.new(url: measure_url, identifier: expected_identifier,
+      measure = FHIR::Measure.new(id: measure_id, url: measure_url, identifier: { system: 'invalid_system', value: 'identifier_value' },
                                   version: measure_version)
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
 
       stub_request(
         :post,
-        "#{url}/Measure/$package"
+        "#{url}/Measure/#{measure_id}/$package"
       ).to_return(status: 200, body: bundle.to_json)
-      result = run(test, url:, measure_url:, measure_identifier: 'invalid_system|identifier_value',
+      result = run(test, url:, measure_id:, measure_url:, measure_identifier:,
                          measure_version:)
       expect(result.result).to eq('fail')
     end
 
     it 'fails if a 200 is returned with bundle body but identifier value does not match' do
-      measure = FHIR::Measure.new(url: measure_url, identifier: expected_identifier,
+      measure = FHIR::Measure.new(id: measure_id, url: measure_url, identifier: { system: 'identifier_system', value: 'invalid_value' },
                                   version: measure_version)
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
 
       stub_request(
         :post,
-        "#{url}/Measure/$package"
+        "#{url}/Measure/#{measure_id}/$package"
       ).to_return(status: 200, body: bundle.to_json)
-      result = run(test, url:, measure_url:, measure_identifier: 'identifier_system|invalid_value',
+      result = run(test, url:, measure_id:, measure_url:, measure_identifier:,
                          measure_version:)
       expect(result.result).to eq('fail')
     end
   end
 
   describe 'Server successfully returns all referenced Library related artifacts' do
-    let(:test) { group.tests[2] }
+    let(:test) { group.tests[4] }
     let(:measure_id) { 'measure_id' }
     let(:measure) { FHIR::Measure.new(id: measure_id, library: ['test-Library']) }
     let(:library) do
@@ -187,7 +318,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
   end
 
   describe 'Server returns 404 when no measure matches id' do
-    let(:test) { group.tests[3] }
+    let(:test) { group.tests[5] }
     let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
 
     it 'passes when 404 returned with OperationOutcome' do
@@ -220,7 +351,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
   end
 
   describe 'Server returns 400 when no id, url, or identifier provided' do
-    let(:test) { group.tests[4] }
+    let(:test) { group.tests[6] }
     let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
 
     it 'passes when 400 returned with OperationOutcome' do
