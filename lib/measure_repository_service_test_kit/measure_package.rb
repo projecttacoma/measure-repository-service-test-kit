@@ -39,21 +39,28 @@ module MeasureRepositoryServiceTestKit
       description 'returned response has status code 200 and included Measure matches parameters url,
       identifier, and version. Verifies the server supports SHALL parameters for the operation'
       input :measure_url, title: 'Measure url'
-      input :measure_identifier, title: 'Measure identifier'
-      input :measure_version, title: 'Measure version'
+      input :measure_identifier, optional: true, title: 'Measure identifier'
+      input :measure_version, optional: true, title: 'Measure version'
 
       run do
         params_hash = {
           resourceType: 'Parameters',
           parameter: [
             {	name: 'url',
-              valueUrl: measure_url },
-            {	name: 'identifier',
-              valueString: measure_identifier },
-            { name: 'version',
-              valueString: measure_version }
+              valueUrl: measure_url }
           ]
-        }.freeze
+        }
+        unless measure_identifier.nil?
+          params_hash[:parameter].append({	name: 'identifier',
+                                           valueString: measure_identifier })
+        end
+        unless measure_version.nil?
+          params_hash[:parameter].append({ name: 'version',
+                                           valueString: measure_version })
+        end
+
+        params_hash.freeze
+
         params = FHIR::Parameters.new params_hash
 
         fhir_operation('Measure/$package', body: params)
@@ -62,8 +69,8 @@ module MeasureRepositoryServiceTestKit
         assert_valid_json(response[:body])
         measure = retrieve_measure_from_bundle(measure_url, 'url', resource)
         assert(!measure.nil?)
-        assert(measure_has_matching_identifier?(measure, measure_identifier))
-        assert(measure.version == measure_version)
+        assert(measure_has_matching_identifier?(measure, measure_identifier)) unless measure_identifier.nil?
+        assert(measure.version == measure_version) unless measure_version.nil?
       end
     end
     # rubocop:enable Metrics/BlockLength
