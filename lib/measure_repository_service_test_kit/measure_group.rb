@@ -5,7 +5,7 @@ require 'json'
 module MeasureRepositoryServiceTestKit
   # tests for read by ID and search for Measure service
   class MeasureGroup < Inferno::TestGroup
-    title 'Measure Repository Service Measure Group'
+    title 'Measure Read by Id and Search'
     description 'Ensure measure repository service can retrieve Measure resources by the server-defined id and search'
     id 'measure_group'
 
@@ -20,6 +20,7 @@ module MeasureRepositoryServiceTestKit
       id 'read-by-id-measure-01'
       description %(This test verifies that the Measure resource can be read from the server.)
       input :measure_id, title: 'Measure id'
+      output :measure_id
 
       run do
         fhir_read(:measure, measure_id)
