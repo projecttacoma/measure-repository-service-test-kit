@@ -200,7 +200,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
       expect(result.result).to eq('pass')
     end
 
-    it 'fails if a 200 is returned with bundle body but url does not match' do
+    it 'fails if a 200 is returned with bundle body but id does not match' do
       measure = FHIR::Measure.new(id: 'invalid_id', url: measure_url, identifier: expected_identifier,
                                   version: measure_version)
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
