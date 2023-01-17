@@ -243,7 +243,8 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
     end
 
     it 'fails if a 200 is returned with bundle body but identifier system does not match' do
-      measure = FHIR::Measure.new(id: measure_id, url: measure_url, identifier: { system: 'invalid_system', value: 'identifier_value' },
+      measure = FHIR::Measure.new(id: measure_id, url: measure_url, identifier: { system: 'invalid_system',
+                                                                                  value: 'identifier_value' },
                                   version: measure_version)
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
 
@@ -257,7 +258,8 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
     end
 
     it 'fails if a 200 is returned with bundle body but identifier value does not match' do
-      measure = FHIR::Measure.new(id: measure_id, url: measure_url, identifier: { system: 'identifier_system', value: 'invalid_value' },
+      measure = FHIR::Measure.new(id: measure_id, url: measure_url, identifier: { system: 'identifier_system',
+                                                                                  value: 'invalid_value' },
                                   version: measure_version)
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
 
