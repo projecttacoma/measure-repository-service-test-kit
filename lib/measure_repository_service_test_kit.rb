@@ -3,6 +3,7 @@
 require_relative 'measure_repository_service_test_kit/measure_group'
 require_relative 'measure_repository_service_test_kit/library_group'
 require_relative 'measure_repository_service_test_kit/measure_package'
+require_relative 'measure_repository_service_test_kit/library_package'
 
 module MeasureRepositoryServiceTestKit
   # Overall test suite
@@ -54,5 +55,6 @@ module MeasureRepositoryServiceTestKit
     group from: :measure_group
     group from: :library_group
     group from: :measure_package
+    group from: :library_package
   end
 end

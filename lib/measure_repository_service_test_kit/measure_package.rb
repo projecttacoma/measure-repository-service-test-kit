@@ -123,8 +123,8 @@ module MeasureRepositoryServiceTestKit
         assert(!measure.nil?)
         assert(measure.id == measure_id,
                "No Measure found in bundle with id: #{measure_id}")
-        assert(measure_has_matching_identifier?(measure, measure_identifier),
-               "No Measure found in bundle with idendifier: #{measure_identifier}")
+        assert(resource_has_matching_identifier?(measure, measure_identifier),
+               "No Measure found in bundle with identifier: #{measure_identifier}")
         unless measure_version.nil?
           assert(measure.version == measure_version,
                  "No Measure found in bundle with version: #{measure_version}")
