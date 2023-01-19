@@ -113,7 +113,7 @@ module MeasureRepositoryServiceTestKit
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
         library = retrieve_root_library_from_bundle(library_url, 'url', resource)
-        assert(!library.nil?)
+        assert(!library.nil?, "No Library found in bundle with url: #{library_url}")
         assert(library.id == library_id, "No Library found in bundle with id: #{library_id}")
         assert(resource_has_matching_identifier?(library, library_identifier),
                "No Library found in bundle with identifier: #{library_identifier}")

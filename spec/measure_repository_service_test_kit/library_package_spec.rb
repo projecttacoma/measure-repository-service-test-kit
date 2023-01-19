@@ -80,7 +80,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
 
     it 'fails if a 200 is not returned' do
       library = FHIR::Library.new(url: library_url)
-      bundle = FHIR::Library.new(total: 1, entry: [{ reosurce: library }])
+      bundle = FHIR::Library.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
         "#{url}/Library/$package"
@@ -292,7 +292,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
     end
 
     it 'fails if related artifacts are missing' do
-      bundle = FHIR::Bundle.new(total: 2, entry: [{ resource: library }])
+      bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       repo_create(
         :request,
         name: 'library_package',
@@ -369,7 +369,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       expect(result.result).to eq('fail')
     end
 
-    it 'fails if bundle status code returned' do
+    it 'fails if bundle body returned' do
       bundle = FHIR::Bundle.new
       stub_request(
         :post,

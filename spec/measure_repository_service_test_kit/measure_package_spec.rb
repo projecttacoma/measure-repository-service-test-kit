@@ -374,7 +374,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
       expect(result.result).to eq('fail')
     end
 
-    it 'fails if bundle status code returned' do
+    it 'fails if bundle body returned' do
       bundle = FHIR::Bundle.new
       stub_request(
         :post,
