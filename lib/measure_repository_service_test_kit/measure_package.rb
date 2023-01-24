@@ -120,11 +120,11 @@ module MeasureRepositoryServiceTestKit
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
         measure = retrieve_measure_from_bundle(measure_url, 'url', resource)
-        assert(!measure.nil?)
+        assert(!measure.nil?, "No Measure found in bundle with url: #{measure_url}")
         assert(measure.id == measure_id,
                "No Measure found in bundle with id: #{measure_id}")
-        assert(measure_has_matching_identifier?(measure, measure_identifier),
-               "No Measure found in bundle with idendifier: #{measure_identifier}")
+        assert(resource_has_matching_identifier?(measure, measure_identifier),
+               "No Measure found in bundle with identifier: #{measure_identifier}")
         unless measure_version.nil?
           assert(measure.version == measure_version,
                  "No Measure found in bundle with version: #{measure_version}")

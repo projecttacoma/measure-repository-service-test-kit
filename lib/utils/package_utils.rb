@@ -42,7 +42,7 @@ module MeasureRepositoryServiceTestKit
         bundle.entry.find do |e|
           if e.resource.resourceType == 'Measure'
             if iden_type == 'identifier'
-              measure_has_matching_identifier?(e.resource, measure_iden)
+              resource_has_matching_identifier?(e.resource, measure_iden)
             else
               e.resource.send(iden_type) == measure_iden
             end
@@ -54,10 +54,28 @@ module MeasureRepositoryServiceTestKit
     end
     # rubocop:enable Metrics/MethodLength
 
+    # rubocop:disable Metrics/MethodLength
+    def retrieve_root_library_from_bundle(library_iden, iden_type, bundle)
+      entry =
+        bundle.entry.find do |e|
+          if e.resource.resourceType == 'Library'
+            if iden_type == 'identifier'
+              resource_has_matching_identifier?(e.resource, library_iden)
+            else
+              e.resource.send(iden_type) == library_iden
+            end
+          end
+        end
+      return unless entry
+
+      entry.resource
+    end
+    # rubocop:enable Metrics/MethodLength
+
     # rubocop:disable Metrics/CyclomaticComplexity
-    def measure_has_matching_identifier?(measure, identifier)
+    def resource_has_matching_identifier?(resource, identifier)
       sys, value = split_identifier(identifier)
-      measure.identifier.any? do |iden|
+      resource.identifier.any? do |iden|
         does_match = true
         does_match &&= iden.value == value if !iden.value.nil? && value
         does_match &&= iden.system == sys if !iden.system.nil? && sys
