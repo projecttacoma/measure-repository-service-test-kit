@@ -71,7 +71,7 @@ module MeasureRepositoryServiceTestKit
       entry.resource
     end
     # rubocop:enable Metrics/MethodLength
-    
+
     def related_valuesets_present?(bundle)
       valueset_urls = Set[]
       bundle.entry.each do |e|

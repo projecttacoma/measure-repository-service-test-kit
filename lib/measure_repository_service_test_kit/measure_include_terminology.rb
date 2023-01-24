@@ -11,7 +11,7 @@ module MeasureRepositoryServiceTestKit
 
     title 'Measure include terminology $package'
     description 'Ensure measure repository service can execute the $package
-    operation to the Measure endpoint with include-terminology query parameter'
+    operation to the Measure endpoint with include-terminology=true query parameter'
     id 'measure_include_terminology'
 
     fhir_client do
@@ -20,7 +20,7 @@ module MeasureRepositoryServiceTestKit
 
     test do
       optional
-      title '200 response and JSON Bundle body including measure reasource for POST by id in url'
+      title '200 response and JSON Bundle body including measure resource for POST by id in url'
       id 'measure-include-terminology-01'
       description 'returned response has status code 200 and valid JSON FHIR Bundle
       including Measure resource and valueset resources in body and include-terminology=true'
@@ -130,11 +130,11 @@ module MeasureRepositoryServiceTestKit
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
         measure = retrieve_measure_from_bundle(measure_url, 'url', resource)
-        assert(!measure.nil?)
+        assert(!measure.nil?, "No Measure found in bundle with url: #{measure_url}")
         assert(measure.id == measure_id,
                "No Measure found in bundle with id: #{measure_id}")
-        assert(measure_has_matching_identifier?(measure, measure_identifier),
-               "No Measure found in bundle with idendifier: #{measure_identifier}")
+        assert(resource_has_matching_identifier?(measure, measure_identifier),
+               "No Measure found in bundle with identifier: #{measure_identifier}")
         unless measure_version.nil?
           assert(measure.version == measure_version,
                  "No Measure found in bundle with version: #{measure_version}")
