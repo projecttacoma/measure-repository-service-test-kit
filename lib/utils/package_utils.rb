@@ -71,6 +71,35 @@ module MeasureRepositoryServiceTestKit
       entry.resource
     end
     # rubocop:enable Metrics/MethodLength
+    
+    def related_valuesets_present?(bundle)
+      valueset_urls = Set[]
+      bundle.entry.each do |e|
+        next unless e.resource.resourceType == 'Library'
+
+        add_valueset_urls(valueset_urls, e.resource)
+      end
+      valueset_in_bundle?(valueset_urls, bundle)
+    end
+
+    def add_valueset_urls(valueset_urls, library)
+      library.relatedArtifact.each do |ra|
+        valueset_urls.add(ra.resource) if ra.type == 'depends-on' && ra.resource.include?('ValueSet')
+      end
+    end
+
+    def valueset_in_bundle?(valueset_urls, bundle)
+      valueset_urls.all? do |url|
+        if url.include? '|'
+          split_reference = url.split('|')
+          url = split_reference[0]
+          version = split_reference[1]
+        end
+        bundle.entry.any? do |e|
+          e.resource.url == url && e.resource.version == version
+        end
+      end
+    end
 
     # rubocop:disable Metrics/CyclomaticComplexity
     def resource_has_matching_identifier?(resource, identifier)
