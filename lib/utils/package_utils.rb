@@ -90,13 +90,8 @@ module MeasureRepositoryServiceTestKit
 
     def valueset_in_bundle?(valueset_urls, bundle)
       valueset_urls.all? do |url|
-        if url.include? '|'
-          split_reference = url.split('|')
-          url = split_reference[0]
-          version = split_reference[1]
-        end
         bundle.entry.any? do |e|
-          e.resource.url == url && e.resource.version == version
+          e.resource.url == url
         end
       end
     end

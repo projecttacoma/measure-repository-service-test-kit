@@ -148,7 +148,7 @@ module MeasureRepositoryServiceTestKit
       title 'All related artifacts present including valuesets'
       id 'measure-include-terminology-05'
       description 'returned bundle inludes all artifacts for all libraries
-        including valuesets with include-terminology=true'
+      including valuesets with include-terminology=true'
       input :measure_id, title: 'Measure id'
       uses_request :measure_package_include_terminology
       run do
