@@ -4,8 +4,6 @@ require_relative 'measure_repository_service_test_kit/measure_group'
 require_relative 'measure_repository_service_test_kit/library_group'
 require_relative 'measure_repository_service_test_kit/measure_package'
 require_relative 'measure_repository_service_test_kit/library_package'
-require_relative 'measure_repository_service_test_kit/measure_include_terminology'
-require_relative 'measure_repository_service_test_kit/library_include_terminology'
 
 module MeasureRepositoryServiceTestKit
   # Overall test suite
@@ -58,7 +56,5 @@ module MeasureRepositoryServiceTestKit
     group from: :library_group
     group from: :measure_package
     group from: :library_package
-    group from: :measure_include_terminology
-    group from: :library_include_terminology
   end
 end

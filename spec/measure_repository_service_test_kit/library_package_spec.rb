@@ -312,8 +312,60 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
     end
   end
 
-  describe 'Server returns 404 when no library matches id' do
+  describe 'Server successfully returns all referenced Library related artifacts including valuesets
+  with include-terminology=true' do
     let(:test) { group.tests[5] }
+    let(:library_id) { 'library_id' }
+    let(:library) do
+      FHIR::Library.new(id: library_id, url: 'test-Library',
+                        relatedArtifact: [{ type: 'depends-on', resource: 'dep-Library' },
+                                          { type: 'depends-on',
+                                            resource: 'dep-ValueSet' }])
+    end
+    let(:dep_library) { FHIR::Library.new(url: 'dep-Library') }
+    let(:dep_valueset) { FHIR::ValueSet.new(url: 'dep-ValueSet') }
+
+    it 'passes if all related artifacts are present' do
+      bundle = FHIR::Bundle.new(total: 3,
+                                entry: [{ resource: library },
+                                        { resource: dep_library }, { resource: dep_valueset }])
+      stub_request(
+        :post,
+        "#{url}/Library/#{library_id}/$package?include-terminology=true"
+      ).to_return(status: 200, body: bundle.to_json)
+
+      result = run(test, url:, library_id:)
+      expect(result.result).to eq('pass')
+    end
+
+    it 'fails if valueset related artifacts are missing' do
+      bundle = FHIR::Bundle.new(total: 2,
+                                entry: [{ resource: library },
+                                        { resource: dep_library }])
+      stub_request(
+        :post,
+        "#{url}/Library/#{library_id}/$package?include-terminology=true"
+      ).to_return(status: 200, body: bundle.to_json)
+
+      result = run(test, url:, library_id:)
+      expect(result.result).to eq('fail')
+    end
+
+    it 'fails if related artifacts are missing' do
+      bundle = FHIR::Bundle.new(total: 1,
+                                entry: [{ resource: library }])
+      stub_request(
+        :post,
+        "#{url}/Library/#{library_id}/$package?include-terminology=true"
+      ).to_return(status: 200, body: bundle.to_json)
+
+      result = run(test, url:, library_id:)
+      expect(result.result).to eq('fail')
+    end
+  end
+
+  describe 'Server returns 404 when no library matches id' do
+    let(:test) { group.tests[6] }
     let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
 
     it 'passses when 404 returned with OperationOutcome' do
@@ -348,7 +400,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
   end
 
   describe 'Server returns 400 when no id, url, or identifier provided' do
-    let(:test) { group.tests[6] }
+    let(:test) { group.tests[7] }
     let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
 
     it 'passes when 400 returned with OperationOutcome' do

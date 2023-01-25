@@ -145,8 +145,28 @@ module MeasureRepositoryServiceTestKit
     end
 
     test do
-      title 'Throws 404 when no Measure on server matches id'
+      optional
+      title 'All related artifacts present including valuesets when include-terminology=true'
       id 'measure-package-06'
+      description 'returned bundle includes all related artifacts for all libraries
+      including valuesets with include-terminology=true'
+      input :measure_id, title: 'Measure id'
+
+      run do
+        fhir_operation("Measure/#{measure_id}/$package?include-terminology=true")
+        assert_response_status(200)
+        assert_resource_type(:bundle)
+        assert_valid_json(response[:body])
+        measure = retrieve_measure_from_bundle(measure_id, 'id', resource)
+        assert(!measure.nil?, "No Measure found in bundle with id: #{measure_id}")
+        assert(related_artifacts_present?(resource))
+        assert(related_valuesets_present?(resource))
+      end
+    end
+
+    test do
+      title 'Throws 404 when no Measure on server matches id'
+      id 'measure-package-07'
       description 'returns 404 status code with OperationOutcome when no Measure exists with passed-in id'
 
       run do
@@ -160,7 +180,7 @@ module MeasureRepositoryServiceTestKit
 
     test do
       title 'Throws 400 when no id, url, or identifier provided'
-      id 'measure-package-07'
+      id 'measure-package-08'
       description 'returns 400 status code with OperationOutcome when no id, url, or identifier provided'
 
       run do
