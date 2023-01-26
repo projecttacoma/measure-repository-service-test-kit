@@ -134,7 +134,7 @@ module MeasureRepositoryServiceTestKit
       uses_request :library_package
 
       run do
-        assert(related_artifacts_present?(resource))
+        assert(related_artifacts_present?(resource, false))
       end
     end
 
@@ -153,8 +153,7 @@ module MeasureRepositoryServiceTestKit
         assert_valid_json(response[:body])
         library = retrieve_root_library_from_bundle(library_id, 'id', resource)
         assert(!library.nil?, "No Library found in bundle with id: #{library_id}")
-        assert(related_artifacts_present?(resource))
-        assert(related_valuesets_present?(resource))
+        assert(related_artifacts_present?(resource, true))
       end
     end
 

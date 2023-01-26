@@ -5,21 +5,22 @@ require 'set'
 module MeasureRepositoryServiceTestKit
   # Utility functions in support of the $package test group
   module PackageUtils
-    def related_artifacts_present?(bundle)
+    def related_artifacts_present?(bundle, valuesets)
       artifact_urls = Set[]
       bundle.entry.each do |e|
         next unless e.resource.resourceType == 'Library'
 
-        add_artifact_urls(artifact_urls, e.resource)
+        add_artifact_urls(artifact_urls, e.resource, valuesets)
       end
       artifact_in_bundle?(artifact_urls, bundle)
     end
 
-    def add_artifact_urls(artifact_urls, library)
-      library.relatedArtifact.each do |ra|
-        if ra.type == 'depends-on' && ra.resource.include?('Library') && ra.resource != 'http://fhir.org/guides/cqf/common/Library/FHIR-ModelInfo|4.0.1'
-          artifact_urls.add(ra.resource)
-        end
+    def add_artifact_urls(artifact_urls, resource, valuesets)
+      resource.relatedArtifact.each do |ra|
+        artifact_urls.add(ra.resource) if ra.type == 'depends-on' && ra.resource.include?('Library')
+        next unless valuesets
+
+        artifact_urls.add(ra.resource) if ra.type == 'depends-on' && ra.resource.include?('ValueSet')
       end
     end
 
@@ -31,7 +32,7 @@ module MeasureRepositoryServiceTestKit
           version = split_reference[1]
         end
         bundle.entry.any? do |e|
-          e.resource.url == url && e.resource.version == version
+          e.resource.url == url && (!version || e.resource.version == version)
         end
       end
     end
@@ -71,30 +72,6 @@ module MeasureRepositoryServiceTestKit
       entry.resource
     end
     # rubocop:enable Metrics/MethodLength
-
-    def related_valuesets_present?(bundle)
-      valueset_urls = Set[]
-      bundle.entry.each do |e|
-        next unless e.resource.resourceType == 'Library'
-
-        add_valueset_urls(valueset_urls, e.resource)
-      end
-      valueset_in_bundle?(valueset_urls, bundle)
-    end
-
-    def add_valueset_urls(valueset_urls, library)
-      library.relatedArtifact.each do |ra|
-        valueset_urls.add(ra.resource) if ra.type == 'depends-on' && ra.resource.include?('ValueSet')
-      end
-    end
-
-    def valueset_in_bundle?(valueset_urls, bundle)
-      valueset_urls.all? do |url|
-        bundle.entry.any? do |e|
-          e.resource.url == url
-        end
-      end
-    end
 
     # rubocop:disable Metrics/CyclomaticComplexity
     def resource_has_matching_identifier?(resource, identifier)

@@ -140,7 +140,7 @@ module MeasureRepositoryServiceTestKit
       input :measure_id, title: 'Measure id'
       uses_request :measure_package
       run do
-        assert(related_artifacts_present?(resource))
+        assert(related_artifacts_present?(resource, false))
       end
     end
 
@@ -159,8 +159,7 @@ module MeasureRepositoryServiceTestKit
         assert_valid_json(response[:body])
         measure = retrieve_measure_from_bundle(measure_id, 'id', resource)
         assert(!measure.nil?, "No Measure found in bundle with id: #{measure_id}")
-        assert(related_artifacts_present?(resource))
-        assert(related_valuesets_present?(resource))
+        assert(related_artifacts_present?(resource, true))
       end
     end
 
