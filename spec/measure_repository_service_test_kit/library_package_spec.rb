@@ -351,9 +351,9 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       expect(result.result).to eq('fail')
     end
 
-    it 'fails if related artifacts are missing' do
-      bundle = FHIR::Bundle.new(total: 1,
-                                entry: [{ resource: library }])
+    it 'fails if library related artifacts are missing' do
+      bundle = FHIR::Bundle.new(total: 2,
+                                entry: [{ resource: library }, { resource: dep_valueset }])
       stub_request(
         :post,
         "#{url}/Library/#{library_id}/$package?include-terminology=true"
