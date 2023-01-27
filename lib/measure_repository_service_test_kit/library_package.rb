@@ -139,27 +139,8 @@ module MeasureRepositoryServiceTestKit
     end
 
     test do
-      optional
-      title 'All related artifacts present including valuesets when include-terminology=true'
-      id 'library-package-06'
-      description 'returned bundle includes all related artifacts for all libraries
-      including valuesets with include-terminology=true'
-      input :library_id, title: 'Library id'
-
-      run do
-        fhir_operation("Library/#{library_id}/$package?include-terminology=true")
-        assert_response_status(200)
-        assert_resource_type(:bundle)
-        assert_valid_json(response[:body])
-        library = retrieve_root_library_from_bundle(library_id, 'id', resource)
-        assert(!library.nil?, "No Library found in bundle with id: #{library_id}")
-        assert(related_artifacts_present?(resource, true))
-      end
-    end
-
-    test do
       title 'Throws 404 when no Library on server matches id'
-      id 'library-package-07'
+      id 'library-package-06'
       description 'returns 404 status code with OperationOutcome when no Library exists with passed-in id'
 
       run do
@@ -173,7 +154,7 @@ module MeasureRepositoryServiceTestKit
 
     test do
       title 'Throws 400 when no id, url, or identifier provided'
-      id 'library-package-08'
+      id 'library-package-07'
       description 'returns 400 status code with OperationOutcome when no id, url, or identifier provided'
 
       run do
@@ -182,6 +163,25 @@ module MeasureRepositoryServiceTestKit
         assert_valid_json(response[:body])
         assert(resource.resourceType == 'OperationOutcome')
         assert(resource.issue[0].severity == 'error')
+      end
+    end
+
+    test do
+      optional
+      title 'All related artifacts present including valuesets when include-terminology=true'
+      id 'library-package-08'
+      description 'returned bundle includes all related artifacts for all libraries
+      including valuesets with include-terminology=true'
+      input :library_id, title: 'Library id'
+
+      run do
+        fhir_operation("Library/#{library_id}/$package?include-terminology=true")
+        assert_response_status(200)
+        assert_resource_type(:bundle)
+        assert_valid_json(response[:body])
+        library = retrieve_root_library_from_bundle(library_id, 'id', resource)
+        assert(!library.nil?, "No Library found in bundle with id: #{library_id}")
+        assert(related_artifacts_present?(resource, true))
       end
     end
   end

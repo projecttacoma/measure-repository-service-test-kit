@@ -312,9 +312,77 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
     end
   end
 
+  describe 'Server returns 404 when no library matches id' do
+    let(:test) { group.tests[5] }
+    let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
+
+    it 'passses when 404 returned with OperationOutcome' do
+      stub_request(
+        :post,
+        "#{url}/Library/INVALID_ID/$package"
+      ).to_return(status: 404, body: error_outcome.to_json)
+
+      result = run(test, url:)
+      expect(result.result).to eq('pass')
+    end
+
+    it 'fails if 200 status code returned' do
+      stub_request(
+        :post,
+        "#{url}/Library/INVALID_ID/$package"
+      ).to_return(status: 200, body: error_outcome.to_json)
+
+      result = run(test, url:)
+      expect(result.result).to eq('fail')
+    end
+
+    it 'fails if bundle returned' do
+      bundle = FHIR::Bundle.new
+      stub_request(
+        :post,
+        "#{url}/Library/INVALID_ID/$package"
+      ).to_return(status: 200, body: bundle.to_json)
+      result = run(test, url:)
+      expect(result.result).to eq('fail')
+    end
+  end
+
+  describe 'Server returns 400 when no id, url, or identifier provided' do
+    let(:test) { group.tests[6] }
+    let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
+
+    it 'passes when 400 returned with OperationOutcome' do
+      stub_request(
+        :post,
+        "#{url}/Library/$package"
+      ).to_return(status: 400, body: error_outcome.to_json)
+      result = run(test, url:)
+      expect(result.result).to eq('pass')
+    end
+
+    it 'fails if 200 status code returned' do
+      stub_request(
+        :post,
+        "#{url}/Library/$package"
+      ).to_return(status: 200, body: error_outcome.to_json)
+      result = run(test, url:)
+      expect(result.result).to eq('fail')
+    end
+
+    it 'fails if bundle body returned' do
+      bundle = FHIR::Bundle.new
+      stub_request(
+        :post,
+        "#{url}/Library/$package"
+      ).to_return(status: 400, body: bundle.to_json)
+      result = run(test, url:)
+      expect(result.result).to eq('fail')
+    end
+  end
+
   describe 'Server successfully returns all referenced Library related artifacts including valuesets
   with include-terminology=true' do
-    let(:test) { group.tests[5] }
+    let(:test) { group.tests[7] }
     let(:library_id) { 'library_id' }
     let(:library) do
       FHIR::Library.new(id: library_id, url: 'test-Library',
@@ -360,74 +428,6 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_id:)
-      expect(result.result).to eq('fail')
-    end
-  end
-
-  describe 'Server returns 404 when no library matches id' do
-    let(:test) { group.tests[6] }
-    let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
-
-    it 'passses when 404 returned with OperationOutcome' do
-      stub_request(
-        :post,
-        "#{url}/Library/INVALID_ID/$package"
-      ).to_return(status: 404, body: error_outcome.to_json)
-
-      result = run(test, url:)
-      expect(result.result).to eq('pass')
-    end
-
-    it 'fails if 200 status code returned' do
-      stub_request(
-        :post,
-        "#{url}/Library/INVALID_ID/$package"
-      ).to_return(status: 200, body: error_outcome.to_json)
-
-      result = run(test, url:)
-      expect(result.result).to eq('fail')
-    end
-
-    it 'fails if bundle returned' do
-      bundle = FHIR::Bundle.new
-      stub_request(
-        :post,
-        "#{url}/Library/INVALID_ID/$package"
-      ).to_return(status: 200, body: bundle.to_json)
-      result = run(test, url:)
-      expect(result.result).to eq('fail')
-    end
-  end
-
-  describe 'Server returns 400 when no id, url, or identifier provided' do
-    let(:test) { group.tests[7] }
-    let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
-
-    it 'passes when 400 returned with OperationOutcome' do
-      stub_request(
-        :post,
-        "#{url}/Library/$package"
-      ).to_return(status: 400, body: error_outcome.to_json)
-      result = run(test, url:)
-      expect(result.result).to eq('pass')
-    end
-
-    it 'fails if 200 status code returned' do
-      stub_request(
-        :post,
-        "#{url}/Library/$package"
-      ).to_return(status: 200, body: error_outcome.to_json)
-      result = run(test, url:)
-      expect(result.result).to eq('fail')
-    end
-
-    it 'fails if bundle body returned' do
-      bundle = FHIR::Bundle.new
-      stub_request(
-        :post,
-        "#{url}/Library/$package"
-      ).to_return(status: 400, body: bundle.to_json)
-      result = run(test, url:)
       expect(result.result).to eq('fail')
     end
   end
