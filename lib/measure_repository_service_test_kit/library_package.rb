@@ -13,7 +13,9 @@ module MeasureRepositoryServiceTestKit
     description 'Ensure measure repository service can execute the $package operation to the Library endpoint'
     id 'library_package'
 
-    fhir_client { url :url }
+    fhir_client do
+      url :url
+    end
 
     test do
       title '200 response and JSON Bundle body for POST by id in url'
@@ -132,7 +134,7 @@ module MeasureRepositoryServiceTestKit
       uses_request :library_package
 
       run do
-        assert(related_artifacts_present?(resource))
+        assert(related_artifacts_present?(resource, false))
       end
     end
 
@@ -161,6 +163,25 @@ module MeasureRepositoryServiceTestKit
         assert_valid_json(response[:body])
         assert(resource.resourceType == 'OperationOutcome')
         assert(resource.issue[0].severity == 'error')
+      end
+    end
+
+    test do
+      optional
+      title 'All related artifacts present including valuesets when include-terminology=true'
+      id 'library-package-08'
+      description 'returned bundle includes all related artifacts for all libraries
+      including valuesets with include-terminology=true'
+      input :library_id, title: 'Library id'
+
+      run do
+        fhir_operation("Library/#{library_id}/$package?include-terminology=true")
+        assert_response_status(200)
+        assert_resource_type(:bundle)
+        assert_valid_json(response[:body])
+        library = retrieve_root_library_from_bundle(library_id, 'id', resource)
+        assert(!library.nil?, "No Library found in bundle with id: #{library_id}")
+        assert(related_artifacts_present?(resource, true))
       end
     end
   end

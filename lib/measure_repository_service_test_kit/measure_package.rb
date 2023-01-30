@@ -140,7 +140,7 @@ module MeasureRepositoryServiceTestKit
       input :measure_id, title: 'Measure id'
       uses_request :measure_package
       run do
-        assert(related_artifacts_present?(resource))
+        assert(related_artifacts_present?(resource, false))
       end
     end
 
@@ -169,6 +169,25 @@ module MeasureRepositoryServiceTestKit
         assert_valid_json(response[:body])
         assert(resource.resourceType == 'OperationOutcome')
         assert(resource.issue[0].severity == 'error')
+      end
+    end
+
+    test do
+      optional
+      title 'All related artifacts present including valuesets when include-terminology=true'
+      id 'measure-package-08'
+      description 'returned bundle includes all related artifacts for all libraries
+      including valuesets with include-terminology=true'
+      input :measure_id, title: 'Measure id'
+
+      run do
+        fhir_operation("Measure/#{measure_id}/$package?include-terminology=true")
+        assert_response_status(200)
+        assert_resource_type(:bundle)
+        assert_valid_json(response[:body])
+        measure = retrieve_measure_from_bundle(measure_id, 'id', resource)
+        assert(!measure.nil?, "No Measure found in bundle with id: #{measure_id}")
+        assert(related_artifacts_present?(resource, true))
       end
     end
   end

@@ -384,4 +384,57 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
       expect(result.result).to eq('fail')
     end
   end
+
+  describe 'Server successfully returns all referenced Library related artifacts including valuesets
+  with include-terminology=true' do
+    let(:test) { group.tests[7] }
+    let(:measure_id) { 'measure_id' }
+    let(:measure) { FHIR::Measure.new(id: measure_id, library: ['test-Library']) }
+    let(:library) do
+      FHIR::Library.new(url: 'test-Library',
+                        relatedArtifact: [{ type: 'depends-on', resource: 'dep-Library' },
+                                          { type: 'depends-on',
+                                            resource: 'dep-ValueSet' }])
+    end
+    let(:dep_library) { FHIR::Library.new(url: 'dep-Library') }
+    let(:dep_valueset) { FHIR::ValueSet.new(url: 'dep-ValueSet') }
+
+    it 'passes if all related artifacts are present' do
+      bundle = FHIR::Bundle.new(total: 4,
+                                entry: [{ resource: measure }, { resource: library },
+                                        { resource: dep_library }, { resource: dep_valueset }])
+      stub_request(
+        :post,
+        "#{url}/Measure/#{measure_id}/$package?include-terminology=true"
+      ).to_return(status: 200, body: bundle.to_json)
+
+      result = run(test, url:, measure_id:)
+      expect(result.result).to eq('pass')
+    end
+
+    it 'fails if valueset related artifacts are missing' do
+      bundle = FHIR::Bundle.new(total: 3,
+                                entry: [{ resource: measure }, { resource: library },
+                                        { resource: dep_library }])
+      stub_request(
+        :post,
+        "#{url}/Measure/#{measure_id}/$package?include-terminology=true"
+      ).to_return(status: 200, body: bundle.to_json)
+
+      result = run(test, url:, measure_id:)
+      expect(result.result).to eq('fail')
+    end
+
+    it 'fails if library related artifacts are missing' do
+      bundle = FHIR::Bundle.new(total: 3,
+                                entry: [{ resource: measure }, { resource: library }, { resource: dep_valueset }])
+      stub_request(
+        :post,
+        "#{url}/Measure/#{measure_id}/$package?include-terminology=true"
+      ).to_return(status: 200, body: bundle.to_json)
+
+      result = run(test, url:, measure_id:)
+      expect(result.result).to eq('fail')
+    end
+  end
 end
