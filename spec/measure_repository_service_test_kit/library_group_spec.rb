@@ -10,7 +10,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
   let(:url) { 'http://example.com/fhir' }
   let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
 
-  describe 'Server successfully retrieves specified resource by its id' do
+  describe 'Server successfully retrieves Library by its id' do
     let(:test) { group.tests.first }
     let(:library_id) { 'library_id' }
 
@@ -89,7 +89,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its url' do
+  describe 'Server successfully searches and retrieves Library by its url' do
     let(:test) { group.tests[2] }
     let(:library_url) { 'library_url' }
 
@@ -142,7 +142,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its version' do
+  describe 'Server successfully searches and retrieves Library by its version' do
     let(:test) { group.tests[3] }
     let(:library_version) { 'library_version' }
 
@@ -195,7 +195,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its identifier' do
+  describe 'Server successfully searches and retrieves Library by its identifier' do
     let(:test) { group.tests[4] }
     let(:library_identifier) { 'identifier_system|identifier_value' }
     let(:expected_identifier) { { system: 'identifier_system', value: 'identifier_value' } }
@@ -262,7 +262,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its name' do
+  describe 'Server successfully searches and retrieves Library by its name' do
     let(:test) { group.tests[5] }
     let(:library_name) { 'library_name' }
 
@@ -315,7 +315,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its title' do
+  describe 'Server successfully searches and retrieves Library by its title' do
     let(:test) { group.tests[6] }
     let(:library_title) { 'library_title' }
 
@@ -368,7 +368,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its status' do
+  describe 'Server successfully searches and retrieves Library by its status' do
     let(:test) { group.tests[7] }
     let(:library_status) { 'library_status' }
 
@@ -398,7 +398,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
 
     it 'fails if the libraries in the returned FHIR searchset bundle do not match the
       requested status' do
-      library = FHIR::Library.new(status: 'INVALID_STATUS')
+      library = FHIR::Library.new(status: 'active')
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :get,
@@ -421,7 +421,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its description' do
+  describe 'Server successfully searches and retrieves Library by its description' do
     let(:test) { group.tests[8] }
     let(:library_description) { 'library_description' }
 

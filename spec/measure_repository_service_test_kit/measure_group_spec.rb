@@ -10,7 +10,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
   let(:url) { 'http://example.com/fhir' }
   let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
 
-  describe 'Server successfully retrieves specified resource by its id' do
+  describe 'Server successfully retrieves Measure by its id' do
     let(:test) { group.tests.first }
     let(:measure_id) { 'measure_id' }
 
@@ -89,7 +89,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its url' do
+  describe 'Server successfully searches and retrieves Measure by its url' do
     let(:test) { group.tests[2] }
     let(:measure_url) { 'measure_url' }
 
@@ -142,7 +142,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its version' do
+  describe 'Server successfully searches and retrieves Measure by its version' do
     let(:test) { group.tests[3] }
     let(:measure_version) { 'measure_version' }
 
@@ -195,7 +195,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its identifier' do
+  describe 'Server successfully searches and retrieves Measure by its identifier' do
     let(:test) { group.tests[4] }
     let(:measure_identifier) { 'identifier_system|identifier_value' }
     let(:expected_identifier) { { system: 'identifier_system', value: 'identifier_value' } }
@@ -262,7 +262,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its name' do
+  describe 'Server successfully searches and retrieves Measure by its name' do
     let(:test) { group.tests[5] }
     let(:measure_name) { 'measure_name' }
 
@@ -315,7 +315,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its title' do
+  describe 'Server successfully searches and retrieves Measure by its title' do
     let(:test) { group.tests[6] }
     let(:measure_title) { 'measure_title' }
 
@@ -368,7 +368,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its status' do
+  describe 'Server successfully searches and retrieves Measure by its status' do
     let(:test) { group.tests[7] }
     let(:measure_status) { 'measure_status' }
 
@@ -398,7 +398,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
 
     it 'fails if the measures in the returned FHIR searchset bundle do not match the
       requested status' do
-      measure = FHIR::Measure.new(status: 'INVALID_STATUS')
+      measure = FHIR::Measure.new(status: 'active')
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
       stub_request(
         :get,
@@ -421,7 +421,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
   end
 
-  describe 'Server successfully searches and retrieves specified resource by its description' do
+  describe 'Server successfully searches and retrieves Measure by its description' do
     let(:test) { group.tests[8] }
     let(:measure_description) { 'measure_description' }
 
