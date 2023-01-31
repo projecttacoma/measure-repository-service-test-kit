@@ -131,7 +131,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      library =  FHIR::Library.new(url: 'INVALID_URL')
+      library = FHIR::Library.new(url: library_url)
       stub_request(
         :get,
         "#{url}/Library?url=#{library_url}"
@@ -184,7 +184,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      library =  FHIR::Library.new(version: 'INVALID_VERSION')
+      library =  FHIR::Library.new(version: library_version)
       stub_request(
         :get,
         "#{url}/Library?version=#{library_version}"
@@ -251,7 +251,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      library =  FHIR::Library.new(identifier: 'INVALID_IDENTIFIER')
+      library =  FHIR::Library.new(identifier: library_identifier)
       stub_request(
         :get,
         "#{url}/Library?identifier=#{library_identifier}"
@@ -304,7 +304,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      library =  FHIR::Library.new(name: 'INVALID_NAME')
+      library =  FHIR::Library.new(name: library_name)
       stub_request(
         :get,
         "#{url}/Library?name=#{library_name}"
@@ -357,7 +357,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      library =  FHIR::Library.new(title: 'INVALID_TITLE')
+      library =  FHIR::Library.new(title: library_title)
       stub_request(
         :get,
         "#{url}/Library?title=#{library_title}"
@@ -410,7 +410,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      library =  FHIR::Library.new(status: 'INVALID_STATUS')
+      library =  FHIR::Library.new(status: library_status)
       stub_request(
         :get,
         "#{url}/Library?status=#{library_status}"
@@ -463,7 +463,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      library =  FHIR::Library.new(description: 'INVALID_DESCRIPTION')
+      library =  FHIR::Library.new(description: library_description)
       stub_request(
         :get,
         "#{url}/Library?description=#{library_description}"

@@ -114,7 +114,7 @@ module MeasureRepositoryServiceTestKit
     end
 
     test do
-      title 'Server returns 200 response status and bundle that contains all the correct verisons of the library
+      title 'Server returns 200 response status and bundle that contains all the correct versions of the library
       matching a name'
       id 'read-and-search-library-06'
       description %(This test verifies that a Library resource can be found through search by name from the server.)

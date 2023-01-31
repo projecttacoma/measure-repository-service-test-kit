@@ -131,7 +131,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      measure =  FHIR::Measure.new(url: 'INVALID_URL')
+      measure =  FHIR::Measure.new(url: measure_url)
       stub_request(
         :get,
         "#{url}/Measure?url=#{measure_url}"
@@ -184,7 +184,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      measure =  FHIR::Measure.new(version: 'INVALID_VERSION')
+      measure =  FHIR::Measure.new(version: measure_version)
       stub_request(
         :get,
         "#{url}/Measure?version=#{measure_version}"
@@ -251,7 +251,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      measure =  FHIR::Measure.new(identifier: 'INVALID_IDENTIFIER')
+      measure =  FHIR::Measure.new(identifier: measure_identifier)
       stub_request(
         :get,
         "#{url}/Measure?identifier=#{measure_identifier}"
@@ -304,7 +304,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      measure =  FHIR::Measure.new(name: 'INVALID_NAME')
+      measure =  FHIR::Measure.new(name: measure_name)
       stub_request(
         :get,
         "#{url}/Measure?name=#{measure_name}"
@@ -357,7 +357,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      measure =  FHIR::Measure.new(title: 'INVALID_TITLE')
+      measure =  FHIR::Measure.new(title: measure_title)
       stub_request(
         :get,
         "#{url}/Measure?title=#{measure_title}"
@@ -410,7 +410,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      measure =  FHIR::Measure.new(status: 'INVALID_STATUS')
+      measure =  FHIR::Measure.new(status: measure_status)
       stub_request(
         :get,
         "#{url}/Measure?status=#{measure_status}"
@@ -463,7 +463,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      measure =  FHIR::Measure.new(description: 'INVALID_DESCRIPTION')
+      measure =  FHIR::Measure.new(description: measure_description)
       stub_request(
         :get,
         "#{url}/Measure?description=#{measure_description}"
