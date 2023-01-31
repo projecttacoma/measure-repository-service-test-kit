@@ -17,6 +17,13 @@ module MeasureRepositoryServiceTestKit
       url :url
     end
 
+    status_type_options = { list_options: [{ label: 'Active', value: 'active' },
+                                           { label: 'Draft', value: 'draft' },
+                                           { label: 'Retired', value: 'retired' },
+                                           { label: 'Unknown', value: 'unknown' }] }
+    status_type_args = { type: 'radio', optional: false, default: 'active', options: status_type_options,
+                         title: 'Status' }
+
     INVALID_ID = 'INVALID_ID'
 
     test do
@@ -157,7 +164,7 @@ module MeasureRepositoryServiceTestKit
       matching a status'
       id 'read-and-search-measure-08'
       description %(This test verifies a Measure resource can be found through search by status from the server.)
-      input :measure_status, title: 'Measure status'
+      input :measure_status, **status_type_args
 
       run do
         fhir_search(:measure, params: { status: measure_status })
