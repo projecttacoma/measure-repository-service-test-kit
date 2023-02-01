@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module MeasureRepositoryServiceTestKit
   # Utility functions in support of all test groups
   module GeneralUtils
