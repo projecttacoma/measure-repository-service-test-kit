@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
 
 module MeasureRepositoryServiceTestKit
   # Utility functions in support of all test groups
