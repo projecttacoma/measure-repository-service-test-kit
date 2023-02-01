@@ -135,8 +135,8 @@ module MeasureRepositoryServiceTestKit
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
         assert(!resource.entry[0].nil?, 'Search by name returned an empty FHIR searchset bundle')
-        assert resource.entry[0].resource.name.downcase.include?(measure_name.downcase), "Requested resource
-        with name #{measure_name}, received resource with name #{resource.entry[0].resource.name}"
+        assert(/^#{measure_name}/.match(resource.entry[0].resource.name), "Requested resource
+        with name #{measure_name}, received resource with name #{resource.entry[0].resource.name}")
       end
     end
 
@@ -154,8 +154,8 @@ module MeasureRepositoryServiceTestKit
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
         assert(!resource.entry[0].nil?, 'Search by title returned an empty FHIR searchset bundle')
-        assert resource.entry[0].resource.title.downcase.include?(measure_title.downcase), "Requested resource
-        with title #{measure_title}, received resource with title #{resource.entry[0].resource.title}"
+        assert(/^#{measure_title}/.match(resource.entry[0].resource.title), "Requested resource
+        with title #{measure_title}, received resource with title #{resource.entry[0].resource.title}")
       end
     end
 
@@ -192,9 +192,9 @@ module MeasureRepositoryServiceTestKit
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
         assert(!resource.entry[0].nil?, 'Search by description returned an empty FHIR searchset bundle')
-        assert resource.entry[0].resource.description.downcase.include?(measure_description.downcase),
-               "Requested resource with description #{measure_description}, received resource with description
-        #{resource.entry[0].resource.description}"
+        assert(/^#{measure_description}/.match(resource.entry[0].resource.description), "Requested resource
+        with description #{measure_description}, received resource with description
+        #{resource.entry[0].resource.description}")
       end
     end
     # rubocop:enable Metrics/ClassLength
