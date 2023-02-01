@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 require 'json'
-require_relative '../utils/package_utils'
+require_relative '../utils/general_utils'
 
 module MeasureRepositoryServiceTestKit
   # tests for read by ID and search for Library service
   # rubocop:disable Metrics/ClassLength
   class LibraryGroup < Inferno::TestGroup
-    include PackageUtils
+    include GeneralUtils
 
     title 'Library Read by Id and Search'
     description 'Ensure measure repository service can retrieve Library resources by the server-defined id and search'

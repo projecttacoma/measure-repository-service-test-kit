@@ -370,7 +370,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
 
   describe 'Server successfully searches and retrieves Library by its status' do
     let(:test) { group.tests[7] }
-    let(:library_status) { 'library_status' }
+    let(:library_status) { 'draft' }
 
     it 'passes if the libraries in the returned FHIR searchset bundle match the requested status' do
       library = FHIR::Library.new(status: library_status)

@@ -370,7 +370,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
 
   describe 'Server successfully searches and retrieves Measure by its status' do
     let(:test) { group.tests[7] }
-    let(:measure_status) { 'measure_status' }
+    let(:measure_status) { 'draft' }
 
     it 'passes if the measures in the returned FHIR searchset bundle match the requested status' do
       measure = FHIR::Measure.new(status: measure_status)
