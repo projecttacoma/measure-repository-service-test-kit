@@ -2,12 +2,14 @@
 
 require 'json'
 require_relative '../utils/package_utils'
+require_relative '../utils/general_utils'
 
 module MeasureRepositoryServiceTestKit
   # tests for Measure $package service
   # rubocop:disable Metrics/ClassLength
   class MeasurePackage < Inferno::TestGroup
     include PackageUtils
+    include GeneralUtils
 
     title 'Measure $package'
     description 'Ensure measure repository service can execute the $package operation to the Measure endpoint'
