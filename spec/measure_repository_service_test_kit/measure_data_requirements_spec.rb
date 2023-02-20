@@ -22,7 +22,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
   let(:test_session) { repo_create(:test_session, test_suite_id: suite.id) }
   let(:url) { 'http://example.com/fhir' }
 
-  describe 'Server successfully returns Library matching reference server data requirements' do
+  describe 'Server successfully returns Library matching reference server $data-requirements' do
     let(:test) { group.tests.first }
 
     it 'passes if the expected Library is received' do
@@ -223,7 +223,8 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
     end
   end
 
-  describe 'Server successfully returns 200 and Library on $data-requirements with periodStart and periodEnd parameters' do
+  describe 'Server successfully returns 200 and Library on $data-requirements with periodStart and
+    periodEnd parameters' do
     let(:test) { group.tests[3] }
 
     it 'passes if 200 response returned with Library body' do

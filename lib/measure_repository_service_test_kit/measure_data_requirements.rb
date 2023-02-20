@@ -5,6 +5,7 @@ require_relative '../utils/assertion_utils'
 
 module MeasureRepositoryServiceTestKit
   # tests for read by ID and search for Measure service
+  # rubocop:disable Metrics/ClassLength
   class MeasureDataRequirements < Inferno::TestGroup
     # module for shared code for $data-requirements assertions and requests
     module DataRequirementsHelpers
@@ -35,9 +36,9 @@ module MeasureRepositoryServiceTestKit
 
     test do
       include DataRequirementsHelpers
-      title 'Check data requirements with id returns 200'
+      title 'Check $data-requirements with id returns 200'
       id 'data-requirements-01'
-      description 'Data requirements returns 200OK and Library of type module-definition when given Measure id'
+      description '$data-requirements returns 200OK and Library of type module-definition when given Measure id'
       input :measure_id, title: 'Measure id'
 
       run do
@@ -49,9 +50,9 @@ module MeasureRepositoryServiceTestKit
 
     test do
       include DataRequirementsHelpers
-      title 'Check data requirements with url returns 200'
+      title 'Check $data-requirements with url returns 200'
       id 'data-requirements-02'
-      description 'Data requirements returns 200OK and Library of type module-definition when passed in a url'
+      description '$data-requirements returns 200OK and Library of type module-definition when passed in a url'
       input :measure_url, title: 'Measure url'
       input :measure_version, optional: true, title: 'Measure version'
 
@@ -77,9 +78,9 @@ module MeasureRepositoryServiceTestKit
 
     test do
       include DataRequirementsHelpers
-      title 'Check data requirements with identifier returns 200'
+      title 'Check $data-requirements with identifier returns 200'
       id 'data-requirements-03'
-      description 'Data requirement returns 200OK and Library of type module-definition when passed in an identifier'
+      description '$data-requirements returns 200OK and Library of type module-definition when passed in an identifier'
       input :measure_identifier, title: 'Measure identifier'
       run do
         identifier_params = {
@@ -99,9 +100,9 @@ module MeasureRepositoryServiceTestKit
 
     test do
       include DataRequirementsHelpers
-      title 'Check data requirements accepts periodStart and periodEnd parameters'
+      title 'Check $data-requirements accepts periodStart and periodEnd parameters'
       id 'data-requirements-04'
-      description 'Data requirements returns 200 when passed periodStart and periodEnd parameters'
+      description '$data-requirements returns 200 when passed periodStart and periodEnd parameters'
       input :measure_id, title: 'Measure id'
 
       run do
@@ -115,9 +116,9 @@ module MeasureRepositoryServiceTestKit
 
     test do
       include DataRequirementsHelpers
-      title 'Check data requirements returns 404 for invalid measure id'
+      title 'Check $data-requirements returns 404 for invalid measure id'
       id 'data-requirements-05'
-      description 'Data requirements returns 404 when passed a measure id which is not in the system'
+      description '$data-requirements returns 404 when passed a measure id which is not in the system'
 
       run do
         fhir_operation(
@@ -130,9 +131,9 @@ module MeasureRepositoryServiceTestKit
 
     test do
       include DataRequirementsHelpers
-      title 'Check data requirements returns 400 for no identification info'
+      title 'Check $data-requirements returns 400 for no identification info'
       id 'data-requirements-06'
-      description 'Data requirements returns 404 when passed a measure id which is not in the system'
+      description '$data-requirements returns 404 when passed a measure id which is not in the system'
 
       run do
         fhir_operation(
@@ -145,9 +146,9 @@ module MeasureRepositoryServiceTestKit
 
     test do
       include DataRequirementsHelpers
-      title 'Check data requirements returns 400 for invalid parameter'
+      title 'Check $data-requirements returns 400 for invalid parameter'
       id 'data-requirements-07'
-      description 'Data requirements returns 400 when passed an invalid parameter'
+      description '$data-requirements returns 400 when passed an invalid parameter'
 
       run do
         fhir_operation(
@@ -158,4 +159,5 @@ module MeasureRepositoryServiceTestKit
       end
     end
   end
+  # rubocop:enable Metrics/ClassLength
 end
