@@ -210,7 +210,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
   describe 'Server successfully returns 200 and Library on $data-requirements with periodStart and
     periodEnd parameters' do
     let(:test) { group.tests[3] }
-    let(:params_query) { '?periodStart=2019-01-01&periodEnd=2020-01-01' }
+    let(:params_query) { '?periodStart=2023-01-01&periodEnd=2023-12-31' }
 
     it 'passes if 200 response returned with Library body' do
       stub_request(

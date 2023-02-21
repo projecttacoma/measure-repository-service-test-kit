@@ -2,23 +2,12 @@
 
 require 'json'
 require_relative '../utils/assertion_utils'
+require_relative '../utils/data_requirements_utils'
 
 module MeasureRepositoryServiceTestKit
   # tests for $data-requirements operation for Measure service
   # rubocop:disable Metrics/ClassLength
   class MeasureDataRequirements < Inferno::TestGroup
-    # module for shared code for $data-requirements assertions and requests
-    module DataRequirementsHelpers
-      def assert_dr_failure(expected_status: 400)
-        assert_error(expected_status)
-      end
-
-      def assert_dr_success
-        assert_success(:library, 200)
-        assert(!resource.type.coding.find { |c| c.code == 'module-definition' }.nil?)
-      end
-    end
-
     title 'Measure $data-requirements'
     description 'Ensure measure repository service can run Measure/$data-requirements operation'
     id 'measure_data_requirements'
@@ -30,7 +19,7 @@ module MeasureRepositoryServiceTestKit
     INVALID_ID = 'INVALID_ID'
 
     test do
-      include DataRequirementsHelpers
+      include DataRequirementsUtils
       title 'Check $data-requirements with id returns 200'
       id 'data-requirements-01'
       description '$data-requirements returns 200OK and Library of type module-definition when given Measure id'
@@ -44,7 +33,7 @@ module MeasureRepositoryServiceTestKit
     end
 
     test do
-      include DataRequirementsHelpers
+      include DataRequirementsUtils
       title 'Check $data-requirements with url returns 200'
       id 'data-requirements-02'
       description '$data-requirements returns 200OK and Library of type module-definition when passed in a Measure url'
@@ -76,7 +65,7 @@ module MeasureRepositoryServiceTestKit
     end
 
     test do
-      include DataRequirementsHelpers
+      include DataRequirementsUtils
       title 'Check $data-requirements with identifier returns 200'
       id 'data-requirements-03'
       description '$data-requirements returns 200OK and Library of type module-definition
@@ -101,7 +90,7 @@ module MeasureRepositoryServiceTestKit
     end
 
     test do
-      include DataRequirementsHelpers
+      include DataRequirementsUtils
       title 'Check $data-requirements accepts periodStart and periodEnd parameters'
       id 'data-requirements-04'
       description '$data-requirements returns 200 when passed periodStart and periodEnd parameters'
@@ -117,7 +106,7 @@ module MeasureRepositoryServiceTestKit
     end
 
     test do
-      include DataRequirementsHelpers
+      include DataRequirementsUtils
       title 'Throws 404 error when no measure on the server matches id'
       id 'data-requirements-05'
       description '$data-requirements returns 404 when passed a measure id which is not in the system'
@@ -132,7 +121,7 @@ module MeasureRepositoryServiceTestKit
     end
 
     test do
-      include DataRequirementsHelpers
+      include DataRequirementsUtils
       title 'Check $data-requirements returns 400 for no identification info'
       id 'data-requirements-06'
       description '$data-requirements returns 400 when no id, url, or identifier parameter included'
@@ -147,7 +136,7 @@ module MeasureRepositoryServiceTestKit
     end
 
     test do
-      include DataRequirementsHelpers
+      include DataRequirementsUtils
       title 'Check $data-requirements returns 400 for invalid parameter'
       id 'data-requirements-07'
       description '$data-requirements returns 400 when passed an invalid parameter'
