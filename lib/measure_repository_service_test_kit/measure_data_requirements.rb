@@ -4,7 +4,7 @@ require 'json'
 require_relative '../utils/assertion_utils'
 
 module MeasureRepositoryServiceTestKit
-  # tests for read by ID and search for Measure service
+  # tests for $data-requirements operation for Measure service
   # rubocop:disable Metrics/ClassLength
   class MeasureDataRequirements < Inferno::TestGroup
     # module for shared code for $data-requirements assertions and requests
@@ -27,11 +27,6 @@ module MeasureRepositoryServiceTestKit
       url :url
     end
 
-    PARAMS = {
-      resourceType: 'Parameters',
-      parameter: []
-    }.freeze
-
     INVALID_ID = 'INVALID_ID'
 
     test do
@@ -42,8 +37,7 @@ module MeasureRepositoryServiceTestKit
       input :measure_id, title: 'Measure id'
 
       run do
-        fhir_operation("Measure/#{measure_id}/$data-requirements",
-                       body: PARAMS)
+        fhir_operation("Measure/#{measure_id}/$data-requirements")
         assert_dr_success
       end
     end
@@ -57,7 +51,7 @@ module MeasureRepositoryServiceTestKit
       input :measure_version, optional: true, title: 'Measure version'
 
       run do
-        url_params = {
+        url_params_hash = {
           resourceType: 'Parameters',
           parameter: [{
             name: 'url',
@@ -66,9 +60,11 @@ module MeasureRepositoryServiceTestKit
         }
 
         unless measure_version.nil?
-          url_params[:parameter].append({ name: 'version',
-                                          valueString: measure_version })
+          url_params_hash[:parameter].append({ name: 'version',
+                                               valueString: measure_version })
         end
+        url_params_hash = url_params_hash.freeze
+        url_params = FHIR::Parameters.new url_params_hash
 
         fhir_operation('Measure/$data-requirements',
                        body: url_params)
@@ -83,13 +79,14 @@ module MeasureRepositoryServiceTestKit
       description '$data-requirements returns 200OK and Library of type module-definition when passed in an identifier'
       input :measure_identifier, title: 'Measure identifier'
       run do
-        identifier_params = {
+        identifier_params_hash = {
           resourceType: 'Parameters',
           parameter: [{
             name: 'identifier',
             valueUrl: measure_identifier
           }]
-        }
+        }.freeze
+        identifier_params = FHIR::Parameters.new identifier_params_hash
 
         fhir_operation('Measure/$data-requirements',
                        body: identifier_params)
@@ -107,8 +104,7 @@ module MeasureRepositoryServiceTestKit
 
       run do
         fhir_operation(
-          "Measure/#{measure_id}/$data-requirements?periodStart=2019-01-01&periodEnd=2020-01-01",
-          body: PARAMS
+          "Measure/#{measure_id}/$data-requirements?periodStart=2019-01-01&periodEnd=2020-01-01"
         )
         assert_dr_success
       end
@@ -122,8 +118,7 @@ module MeasureRepositoryServiceTestKit
 
       run do
         fhir_operation(
-          "Measure/#{INVALID_ID}/$data-requirements",
-          body: PARAMS
+          "Measure/#{INVALID_ID}/$data-requirements"
         )
         assert_dr_failure(expected_status: 404)
       end
@@ -137,8 +132,7 @@ module MeasureRepositoryServiceTestKit
 
       run do
         fhir_operation(
-          'Measure/$data-requirements',
-          body: PARAMS
+          'Measure/$data-requirements'
         )
         assert_dr_failure
       end
@@ -152,8 +146,7 @@ module MeasureRepositoryServiceTestKit
 
       run do
         fhir_operation(
-          "Measure/#{INVALID_ID}/$data-requirements?invalid=false",
-          body: PARAMS
+          "Measure/#{INVALID_ID}/$data-requirements?invalid=false"
         )
         assert_dr_failure
       end
