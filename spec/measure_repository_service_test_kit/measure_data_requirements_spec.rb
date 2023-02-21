@@ -110,7 +110,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
       expect(result.result).to eq('pass')
     end
 
-    it 'fails if 200 is not retuned' do
+    it 'fails if 200 is not returned' do
       stub_request(
         :post,
         "#{url}/Measure/$data-requirements"
@@ -124,7 +124,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
       expect(result.result).to eq('fail')
     end
 
-    it 'fails if Library is not retuned' do
+    it 'fails if Library is not returned' do
       stub_request(
         :post,
         "#{url}/Measure/$data-requirements"
@@ -170,7 +170,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
       expect(result.result).to eq('pass')
     end
 
-    it 'fails if 200 is not retuned' do
+    it 'fails if 200 is not returned' do
       stub_request(
         :post,
         "#{url}/Measure/$data-requirements"
@@ -183,7 +183,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
       expect(result.result).to eq('fail')
     end
 
-    it 'fails if Library is not retuned' do
+    it 'fails if Library is not returned' do
       stub_request(
         :post,
         "#{url}/Measure/$data-requirements"
@@ -228,7 +228,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
       expect(result.result).to eq('pass')
     end
 
-    it 'fails if 200 is not retuned' do
+    it 'fails if 200 is not returned' do
       stub_request(
         :post,
         "#{url}/Measure/#{measure_id}/$data-requirements#{params_query}"
@@ -241,7 +241,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
       expect(result.result).to eq('fail')
     end
 
-    it 'fails if Library is not retuned' do
+    it 'fails if Library is not returned' do
       stub_request(
         :post,
         "#{url}/Measure/#{measure_id}/$data-requirements#{params_query}"

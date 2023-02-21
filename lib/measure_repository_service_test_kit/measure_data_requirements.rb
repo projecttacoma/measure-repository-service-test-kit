@@ -20,7 +20,7 @@ module MeasureRepositoryServiceTestKit
     end
 
     title 'Measure $data-requirements'
-    description 'Ensure measure repository service can run $data-requirements operation'
+    description 'Ensure measure repository service can run Measure/$data-requirements operation'
     id 'measure_data_requirements'
 
     fhir_client do
@@ -47,7 +47,7 @@ module MeasureRepositoryServiceTestKit
       include DataRequirementsHelpers
       title 'Check $data-requirements with url returns 200'
       id 'data-requirements-02'
-      description '$data-requirements returns 200OK and Library of type module-definition when passed in a url'
+      description '$data-requirements returns 200OK and Library of type module-definition when passed in a Measure url'
       input :measure_url, title: 'Measure url'
       input :measure_version, optional: true, title: 'Measure version'
 
@@ -79,7 +79,7 @@ module MeasureRepositoryServiceTestKit
       include DataRequirementsHelpers
       title 'Check $data-requirements with identifier returns 200'
       id 'data-requirements-03'
-      description '$data-requirements returns 200OK and Library of type module-definition when passed in an identifier'
+      description '$data-requirements returns 200OK and Library of type module-definition when passed in a Measure identifier'
       input :measure_identifier, title: 'Measure identifier'
       run do
         identifier_params_hash = {
@@ -117,7 +117,7 @@ module MeasureRepositoryServiceTestKit
 
     test do
       include DataRequirementsHelpers
-      title 'Check $data-requirements returns 404 for invalid measure id'
+      title 'Throws 404 error when no measure on the server matches id'
       id 'data-requirements-05'
       description '$data-requirements returns 404 when passed a measure id which is not in the system'
 
@@ -134,7 +134,7 @@ module MeasureRepositoryServiceTestKit
       include DataRequirementsHelpers
       title 'Check $data-requirements returns 400 for no identification info'
       id 'data-requirements-06'
-      description '$data-requirements returns 404 when no id, url, or identifier parameter included'
+      description '$data-requirements returns 400 when no id, url, or identifier parameter included'
 
       run do
         fhir_operation(
