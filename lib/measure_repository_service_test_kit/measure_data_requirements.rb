@@ -13,8 +13,8 @@ module MeasureRepositoryServiceTestKit
         assert_error(expected_status)
       end
 
-      def assert_dr_success(resource_type)
-        assert_success(resource_type, 200)
+      def assert_dr_success
+        assert_success(:library, 200)
         assert(!resource.type.coding.find { |c| c.code == 'module-definition' }.nil?)
       end
     end
@@ -44,7 +44,7 @@ module MeasureRepositoryServiceTestKit
       run do
         fhir_operation("Measure/#{measure_id}/$data-requirements",
                        body: PARAMS)
-        assert_dr_success(:library)
+        assert_dr_success
       end
     end
 
@@ -72,7 +72,7 @@ module MeasureRepositoryServiceTestKit
 
         fhir_operation('Measure/$data-requirements',
                        body: url_params)
-        assert_dr_success(:library)
+        assert_dr_success
       end
     end
 
@@ -94,7 +94,7 @@ module MeasureRepositoryServiceTestKit
         fhir_operation('Measure/$data-requirements',
                        body: identifier_params)
 
-        assert_dr_success(:library)
+        assert_dr_success
       end
     end
 
@@ -110,7 +110,7 @@ module MeasureRepositoryServiceTestKit
           "Measure/#{measure_id}/$data-requirements?periodStart=2019-01-01&periodEnd=2020-01-01",
           body: PARAMS
         )
-        assert_dr_success(:library)
+        assert_dr_success
       end
     end
 
