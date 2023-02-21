@@ -38,6 +38,7 @@ module MeasureRepositoryServiceTestKit
 
       run do
         fhir_operation("Measure/#{measure_id}/$data-requirements")
+
         assert_dr_success
       end
     end
@@ -63,11 +64,13 @@ module MeasureRepositoryServiceTestKit
           url_params_hash[:parameter].append({ name: 'version',
                                                valueString: measure_version })
         end
+
         url_params_hash = url_params_hash.freeze
         url_params = FHIR::Parameters.new url_params_hash
 
         fhir_operation('Measure/$data-requirements',
                        body: url_params)
+
         assert_dr_success
       end
     end
@@ -86,6 +89,7 @@ module MeasureRepositoryServiceTestKit
             valueUrl: measure_identifier
           }]
         }.freeze
+
         identifier_params = FHIR::Parameters.new identifier_params_hash
 
         fhir_operation('Measure/$data-requirements',
@@ -106,6 +110,7 @@ module MeasureRepositoryServiceTestKit
         fhir_operation(
           "Measure/#{measure_id}/$data-requirements?periodStart=2019-01-01&periodEnd=2020-01-01"
         )
+
         assert_dr_success
       end
     end
@@ -120,6 +125,7 @@ module MeasureRepositoryServiceTestKit
         fhir_operation(
           "Measure/#{INVALID_ID}/$data-requirements"
         )
+
         assert_dr_failure(expected_status: 404)
       end
     end
@@ -128,12 +134,13 @@ module MeasureRepositoryServiceTestKit
       include DataRequirementsHelpers
       title 'Check $data-requirements returns 400 for no identification info'
       id 'data-requirements-06'
-      description '$data-requirements returns 404 when passed a measure id which is not in the system'
+      description '$data-requirements returns 404 when no id, url, or identifier parameter included'
 
       run do
         fhir_operation(
           'Measure/$data-requirements'
         )
+
         assert_dr_failure
       end
     end
@@ -143,11 +150,13 @@ module MeasureRepositoryServiceTestKit
       title 'Check $data-requirements returns 400 for invalid parameter'
       id 'data-requirements-07'
       description '$data-requirements returns 400 when passed an invalid parameter'
+      input :measure_id, title: 'Measure id'
 
       run do
         fhir_operation(
-          "Measure/#{INVALID_ID}/$data-requirements?invalid=false"
+          "Measure/#{measure_id}/$data-requirements?invalid=false"
         )
+
         assert_dr_failure
       end
     end
