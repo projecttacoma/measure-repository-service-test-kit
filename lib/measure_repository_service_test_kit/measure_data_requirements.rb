@@ -109,7 +109,7 @@ module MeasureRepositoryServiceTestKit
 
       run do
         fhir_operation(
-          "Measure/#{measure_id}/$data-requirements?periodStart=2019-01-01&periodEnd=2020-01-01"
+          "Measure/#{measure_id}/$data-requirements?periodStart=2023-01-01&periodEnd=2023-12-31"
         )
 
         assert_dr_success
