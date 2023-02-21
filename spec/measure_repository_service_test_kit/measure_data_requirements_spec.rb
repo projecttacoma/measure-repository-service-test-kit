@@ -23,9 +23,6 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasurePackage do
     let(:test) { group.tests.first }
 
     it 'passes if 200 response returned with Library body' do
-      stub_request(:get, "#{url}/Measure/#{measure_id}")
-        .to_return(status: 200, body: test_measure.to_json)
-
       stub_request(
         :post,
         "#{url}/Measure/#{measure_id}/$data-requirements"

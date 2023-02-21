@@ -79,7 +79,8 @@ module MeasureRepositoryServiceTestKit
       include DataRequirementsHelpers
       title 'Check $data-requirements with identifier returns 200'
       id 'data-requirements-03'
-      description '$data-requirements returns 200OK and Library of type module-definition when passed in a Measure identifier'
+      description '$data-requirements returns 200OK and Library of type module-definition
+    when passed in a Measure identifier'
       input :measure_identifier, title: 'Measure identifier'
       run do
         identifier_params_hash = {
