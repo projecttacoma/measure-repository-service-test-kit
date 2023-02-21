@@ -140,7 +140,7 @@ module MeasureRepositoryServiceTestKit
           'Measure/$data-requirements',
           body: PARAMS
         )
-        assert_dr_failure(expected_status: 400)
+        assert_dr_failure
       end
     end
 
@@ -155,7 +155,7 @@ module MeasureRepositoryServiceTestKit
           "Measure/#{INVALID_ID}/$data-requirements?invalid=false",
           body: PARAMS
         )
-        assert_dr_failure(expected_status: 400)
+        assert_dr_failure
       end
     end
   end
