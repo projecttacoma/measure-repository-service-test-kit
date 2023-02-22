@@ -144,53 +144,54 @@ RSpec.describe MeasureRepositoryServiceTestKit::MeasureGroup do
 
   describe 'Server successfully searches and retrieves Measure by its version' do
     let(:test) { group.tests[3] }
+    let(:measure_url) { 'measure_url' }
     let(:measure_version) { 'measure_version' }
 
     it 'passes if the measures in the returned FHIR searchset bundle match the requested version' do
-      measure = FHIR::Measure.new(version: measure_version)
+      measure = FHIR::Measure.new(url: measure_url, version: measure_version)
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
       stub_request(
         :get,
-        "#{url}/Measure?version=#{measure_version}"
+        "#{url}/Measure?url=#{measure_url}&version=#{measure_version}"
       ).to_return(status: 200, body: bundle.to_json)
 
-      result = run(test, url:, measure_version:)
+      result = run(test, url:, measure_url:, measure_version:)
       expect(result.result).to eq('pass')
     end
 
     it 'fails if search does not return 200' do
-      measure =  FHIR::Measure.new(version: measure_version)
+      measure =  FHIR::Measure.new(url: measure_url, version: measure_version)
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
       stub_request(
         :get,
-        "#{url}/Measure?version=#{measure_version}"
+        "#{url}/Measure?url=#{measure_url}&version=#{measure_version}"
       ).to_return(status: 400, body: bundle.to_json)
 
-      result = run(test, url:, measure_version:)
+      result = run(test, url:, measure_url:, measure_version:)
       expect(result.result).to eq('fail')
     end
 
     it 'fails if the measures in the returned FHIR searchset bundle do not match the
       requested version' do
-      measure = FHIR::Measure.new(version: 'INVALID_VERSION')
+      measure = FHIR::Measure.new(url: measure_url, version: 'INVALID_VERSION')
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: measure }])
       stub_request(
         :get,
-        "#{url}/Measure?version=#{measure_version}"
+        "#{url}/Measure?url=#{measure_url}&version=#{measure_version}"
       ).to_return(status: 200, body: bundle.to_json)
 
-      result = run(test, url:, measure_version:)
+      result = run(test, url:, measure_url:, measure_version:)
       expect(result.result).to eq('fail')
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      measure =  FHIR::Measure.new(version: measure_version)
+      measure =  FHIR::Measure.new(url: measure_url, version: measure_version)
       stub_request(
         :get,
-        "#{url}/Measure?version=#{measure_version}"
+        "#{url}/Measure?url=#{measure_url}&version=#{measure_version}"
       ).to_return(status: 200, body: measure.to_json)
 
-      result = run(test, url:, measure_version:)
+      result = run(test, url:, measure_url:, measure_version:)
       expect(result.result).to eq('fail')
     end
   end

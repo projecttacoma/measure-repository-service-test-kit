@@ -144,53 +144,54 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryGroup do
 
   describe 'Server successfully searches and retrieves Library by its version' do
     let(:test) { group.tests[3] }
+    let(:library_url) { 'library_url' }
     let(:library_version) { 'library_version' }
 
     it 'passes if the libraries in the returned FHIR searchset bundle match the requested version' do
-      library = FHIR::Library.new(version: library_version)
+      library = FHIR::Library.new(url: library_url, version: library_version)
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :get,
-        "#{url}/Library?version=#{library_version}"
+        "#{url}/Library?url=#{library_url}&version=#{library_version}"
       ).to_return(status: 200, body: bundle.to_json)
 
-      result = run(test, url:, library_version:)
+      result = run(test, url:, library_url:, library_version:)
       expect(result.result).to eq('pass')
     end
 
     it 'fails if search does not return 200' do
-      library =  FHIR::Library.new(version: library_version)
+      library =  FHIR::Library.new(url: library_url, version: library_version)
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :get,
-        "#{url}/Library?version=#{library_version}"
+        "#{url}/Library?url=#{library_url}&version=#{library_version}"
       ).to_return(status: 400, body: bundle.to_json)
 
-      result = run(test, url:, library_version:)
+      result = run(test, url:, library_url:, library_version:)
       expect(result.result).to eq('fail')
     end
 
     it 'fails if the libraries in the returned FHIR searchset bundle do not match the
       requested version' do
-      library = FHIR::Library.new(version: 'INVALID_VERSION')
+      library = FHIR::Library.new(url: library_url, version: 'INVALID_VERSION')
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :get,
-        "#{url}/Library?version=#{library_version}"
+        "#{url}/Library?url=#{library_url}&version=#{library_version}"
       ).to_return(status: 200, body: bundle.to_json)
 
-      result = run(test, url:, library_version:)
+      result = run(test, url:, library_url:, library_version:)
       expect(result.result).to eq('fail')
     end
 
     it 'fails if the search request does not return a FHIR searchset bundle' do
-      library =  FHIR::Library.new(version: library_version)
+      library =  FHIR::Library.new(url: library_url, version: library_version)
       stub_request(
         :get,
-        "#{url}/Library?version=#{library_version}"
+        "#{url}/Library?url=#{library_url}&version=#{library_version}"
       ).to_return(status: 200, body: library.to_json)
 
-      result = run(test, url:, library_version:)
+      result = run(test, url:, library_url:, library_version:)
       expect(result.result).to eq('fail')
     end
   end

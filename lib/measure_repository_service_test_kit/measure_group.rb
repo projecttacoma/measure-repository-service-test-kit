@@ -85,16 +85,20 @@ module MeasureRepositoryServiceTestKit
       matching a version'
       id 'read-and-search-measure-04'
       description %(This test verifies that a Measure resource can be found through search by version
-      from the server.)
+      from the server. Note that version can only be supplied with a url.)
+      input :measure_url, title: 'Measure url'
       input :measure_version, title: 'Measure version'
 
       run do
-        fhir_search(:measure, params: { version: measure_version })
+        fhir_search(:measure, params: { url: measure_url, version: measure_version })
 
         assert_response_status(200)
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
         assert(!resource.entry[0].nil?, 'Search by version returned an empty FHIR searchset bundle')
+        assert resource.entry[0].resource.url == measure_url,
+               "Requested resource with url #{measure_url}, received resource with
+                url #{resource.entry[0].resource.url}"
         assert resource.entry[0].resource.version == measure_version, "Requested resource with version
          #{measure_version}, received resource with version #{resource.entry[0].resource.version}"
       end
