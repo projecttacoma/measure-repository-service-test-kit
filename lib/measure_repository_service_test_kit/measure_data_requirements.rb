@@ -11,9 +11,11 @@ module MeasureRepositoryServiceTestKit
     title 'Measure $data-requirements'
     description 'Ensure measure repository service can run Measure/$data-requirements operation'
     id 'measure_data_requirements'
+    custom_headers = { 'content-type': 'application/fhir+json' }
 
     fhir_client do
       url :url
+      headers custom_headers
     end
 
     INVALID_ID = 'INVALID_ID'

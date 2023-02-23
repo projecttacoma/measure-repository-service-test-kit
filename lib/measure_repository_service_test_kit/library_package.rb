@@ -14,9 +14,11 @@ module MeasureRepositoryServiceTestKit
     title 'Library $package'
     description 'Ensure measure repository service can execute the $package operation to the Library endpoint'
     id 'library_package'
+    custom_headers = { 'content-type': 'application/fhir+json' }
 
     fhir_client do
       url :url
+      headers custom_headers
     end
 
     test do
