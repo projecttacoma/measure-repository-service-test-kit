@@ -61,13 +61,24 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
   describe 'Server successfully returns a $data-requirements Library with url in body' do
     let(:test) { group.tests[1] }
     let(:library_url) { 'library_url' }
+    let(:library_version) { 'library_version' }
 
-    it 'passes if a 200 is returned with module-definition library body' do
+    it 'passes if a 200 is returned with module-definition library body, given url and version' do
       stub_request(
         :post,
         "#{url}/Library/$data-requirements"
       ).to_return(status: 200, body: dr_library.to_json)
-      
+
+      result = run(test, url:, library_url:, library_version:)
+      expect(result.result).to eq('pass')
+    end
+
+    it 'passes if a 200 is returned with module-definition library body, given just url' do
+      stub_request(
+        :post,
+        "#{url}/Library/$data-requirements"
+      ).to_return(status: 200, body: dr_library.to_json)
+
       result = run(test, url:, library_url:)
       expect(result.result).to eq('pass')
     end
@@ -78,7 +89,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         "#{url}/Library/$data-requirements"
       ).to_return(status: 400, body: dr_library.to_json)
 
-      result = run(test, url:, library_url:)
+      result = run(test, url:, library_url:, library_version:)
       expect(result.result).to eq('fail')
     end
 
@@ -88,7 +99,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         "#{url}/Library/$data-requirements"
       ).to_return(status: 200, body: FHIR::Bundle.new(id: 'bundle_id').to_json)
 
-      result = run(test, url:, library_url:)
+      result = run(test, url:, library_url:, library_version:)
       expect(result.result).to eq('fail')
     end
 
@@ -100,7 +111,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         "#{url}/Library/$data-requirements"
       ).to_return(status: 200, body: other_library.to_json)
 
-      result = run(test, url:, library_url:)
+      result = run(test, url:, library_url:, library_version:)
       expect(result.result).to eq('fail')
     end
   end
@@ -114,7 +125,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/$data-requirements"
       ).to_return(status: 200, body: dr_library.to_json)
-      
+
       result = run(test, url:, library_identifier:)
       expect(result.result).to eq('pass')
     end
@@ -164,7 +175,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/#{library_id}/$data-requirements"
       ).to_return(status: 200, body: dr_library.to_json)
-      
+
       result = run(test, url:, library_id:, library_url:, library_identifier:, library_version:)
       expect(result.result).to eq('pass')
     end
@@ -231,7 +242,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/INVALID_ID/$data-requirements"
       ).to_return(status: 200, body: library.to_json)
-      
+
       result = run(test, url:)
       expect(result.result).to eq('fail')
     end
@@ -245,7 +256,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/$data-requirements"
       ).to_return(status: 400, body: error_outcome.to_json)
-      
+
       result = run(test, url:)
       expect(result.result).to eq('pass')
     end
@@ -255,7 +266,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/$data-requirements"
       ).to_return(status: 200, body: error_outcome.to_json)
-      
+
       result = run(test, url:)
       expect(result.result).to eq('fail')
     end
@@ -266,44 +277,45 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/$data-requirements"
       ).to_return(status: 400, body: library.to_json)
-      
+
       result = run(test, url:)
       expect(result.result).to eq('fail')
     end
   end
 
-  describe 'Server returns 400 when id is included in both the path and as a FHIR parameter'
-  let(:test) { group.tests[6] }
-  let(:library_id) { 'library_id' }
+  describe 'Server returns 400 when id is included in both the path and as a FHIR parameter' do
+    let(:test) { group.tests[6] }
+    let(:library_id) { 'library_id' }
 
-  it 'passes when 400 returned with OperationOutcome' do
-    stub_request(
-      :post,
-      "#{url}/Library/#{library_id}/$data-requirements"
-    ).to_return(status: 400, body: error_outcome.to_json)
-    
-    result = run(test, url:, library_id:)
-    expect(result.result).to eq('pass')
-  end
+    it 'passes when 400 returned with OperationOutcome' do
+      stub_request(
+        :post,
+        "#{url}/Library/#{library_id}/$data-requirements"
+      ).to_return(status: 400, body: error_outcome.to_json)
 
-  it 'fails if 200 status code returned' do
-    stub_request(
-      :post,
-      "#{url}/Library/#{library_id}/$data-requirements"
-    ).to_return(status: 200, body: error_outcome.to_json)
-    
-    result = run(test, url:, library_id:)
-    expect(result.result).to eq('fail')
-  end
+      result = run(test, url:, library_id:)
+      expect(result.result).to eq('pass')
+    end
 
-  it 'fails if library body returned' do
-    library = FHIR::Library.new
-    stub_request(
-      :post,
-      "#{url}/Library/#{library_id}/$data-requirements"
-    ).to_return(status: 400, body: library.to_json)
-    
-    result = run(test, url:, library_id:)
-    expect(result.result).to eq('fail')
+    it 'fails if 200 status code returned' do
+      stub_request(
+        :post,
+        "#{url}/Library/#{library_id}/$data-requirements"
+      ).to_return(status: 200, body: error_outcome.to_json)
+
+      result = run(test, url:, library_id:)
+      expect(result.result).to eq('fail')
+    end
+
+    it 'fails if library body returned' do
+      library = FHIR::Library.new
+      stub_request(
+        :post,
+        "#{url}/Library/#{library_id}/$data-requirements"
+      ).to_return(status: 400, body: library.to_json)
+
+      result = run(test, url:, library_id:)
+      expect(result.result).to eq('fail')
+    end
   end
 end

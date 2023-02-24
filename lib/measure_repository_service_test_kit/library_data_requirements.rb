@@ -8,7 +8,7 @@ module MeasureRepositoryServiceTestKit
   # rubocop:disable Metrics/ClassLength
   class LibraryDataRequirements < Inferno::TestGroup
     title 'Library $data-requirements'
-    description 'Ensure measure repository service can execute the $data-requirements operation to the Library endpoint'
+    description 'Ensure measure repository service can run Library/$data-requirements operation'
     id 'library_data_requirements'
     custom_headers = { 'content-type': 'application/fhir+json' }
 
@@ -24,7 +24,7 @@ module MeasureRepositoryServiceTestKit
       description 'returned response has status code 200 and valid JSON FHIR Library with data requirement in body'
       input :library_id, title: 'Library id'
       makes_request :library_data_requirements
-      
+
       run do
         fhir_operation("Library/#{library_id}/$data-requirements", name: :library_data_requirements)
         assert_dr_success
@@ -35,21 +35,28 @@ module MeasureRepositoryServiceTestKit
       include DataRequirementsUtils
       title '200 response and JSON Library body for POST with url in body'
       id 'library-data-requirements-02'
-      description 'returned resopnse has status code 200.'
+      description 'returned response has status code 200.'
       input :library_url, title: 'Library url'
+      input :library_version, optional: true, title: 'Library version'
 
       run do
-        params_hash = {
+        url_params_hash = {
           resourceType: 'Parameters',
           parameter: [
             { name: 'url',
               valueUrl: library_url }
           ]
-        }.freeze
+        }
 
-        params = FHIR::Parameters.new params_hash
+        unless library_version.nil?
+          url_params_hash[:parameter].append({ name: 'version',
+                                               valueString: library_version })
+        end
 
-        fhir_operation('Library/$data-requirements', body: params)
+        url_params_hash = url_params_hash.freeze
+        url_params = FHIR::Parameters.new url_params_hash
+
+        fhir_operation('Library/$data-requirements', body: url_params)
         assert_dr_success
       end
     end
@@ -133,7 +140,7 @@ module MeasureRepositoryServiceTestKit
       id 'library-data-requirements-07'
       description 'returns 400 status code with OperationOutcome when no id, url, or identifier provided'
       input :library_id, title: 'Library id'
-      
+
       run do
         params_hash = {
           resourceType: 'Parameters',
