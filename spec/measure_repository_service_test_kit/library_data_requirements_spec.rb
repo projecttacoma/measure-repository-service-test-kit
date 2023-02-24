@@ -67,6 +67,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/$data-requirements"
       ).to_return(status: 200, body: dr_library.to_json)
+      
       result = run(test, url:, library_url:)
       expect(result.result).to eq('pass')
     end
@@ -113,6 +114,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/$data-requirements"
       ).to_return(status: 200, body: dr_library.to_json)
+      
       result = run(test, url:, library_identifier:)
       expect(result.result).to eq('pass')
     end
@@ -162,6 +164,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/#{library_id}/$data-requirements"
       ).to_return(status: 200, body: dr_library.to_json)
+      
       result = run(test, url:, library_id:, library_url:, library_identifier:, library_version:)
       expect(result.result).to eq('pass')
     end
@@ -228,6 +231,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/INVALID_ID/$data-requirements"
       ).to_return(status: 200, body: library.to_json)
+      
       result = run(test, url:)
       expect(result.result).to eq('fail')
     end
@@ -241,6 +245,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/$data-requirements"
       ).to_return(status: 400, body: error_outcome.to_json)
+      
       result = run(test, url:)
       expect(result.result).to eq('pass')
     end
@@ -250,6 +255,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/$data-requirements"
       ).to_return(status: 200, body: error_outcome.to_json)
+      
       result = run(test, url:)
       expect(result.result).to eq('fail')
     end
@@ -260,6 +266,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
         :post,
         "#{url}/Library/$data-requirements"
       ).to_return(status: 400, body: library.to_json)
+      
       result = run(test, url:)
       expect(result.result).to eq('fail')
     end
@@ -274,6 +281,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
       :post,
       "#{url}/Library/#{library_id}/$data-requirements"
     ).to_return(status: 400, body: error_outcome.to_json)
+    
     result = run(test, url:, library_id:)
     expect(result.result).to eq('pass')
   end
@@ -283,6 +291,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
       :post,
       "#{url}/Library/#{library_id}/$data-requirements"
     ).to_return(status: 200, body: error_outcome.to_json)
+    
     result = run(test, url:, library_id:)
     expect(result.result).to eq('fail')
   end
@@ -293,6 +302,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
       :post,
       "#{url}/Library/#{library_id}/$data-requirements"
     ).to_return(status: 400, body: library.to_json)
+    
     result = run(test, url:, library_id:)
     expect(result.result).to eq('fail')
   end

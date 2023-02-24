@@ -7,8 +7,6 @@ module MeasureRepositoryServiceTestKit
   # tests for Library $package service
   # rubocop:disable Metrics/ClassLength
   class LibraryDataRequirements < Inferno::TestGroup
-    include GeneralUtils
-
     title 'Library $data-requirements'
     description 'Ensure measure repository service can execute the $data-requirements operation to the Library endpoint'
     id 'library_data_requirements'
@@ -26,6 +24,7 @@ module MeasureRepositoryServiceTestKit
       description 'returned response has status code 200 and valid JSON FHIR Library with data requirement in body'
       input :library_id, title: 'Library id'
       makes_request :library_data_requirements
+      
       run do
         fhir_operation("Library/#{library_id}/$data-requirements", name: :library_data_requirements)
         assert_dr_success
@@ -134,6 +133,7 @@ module MeasureRepositoryServiceTestKit
       id 'library-data-requirements-07'
       description 'returns 400 status code with OperationOutcome when no id, url, or identifier provided'
       input :library_id, title: 'Library id'
+      
       run do
         params_hash = {
           resourceType: 'Parameters',
