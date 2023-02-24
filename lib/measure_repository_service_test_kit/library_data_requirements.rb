@@ -88,7 +88,7 @@ module MeasureRepositoryServiceTestKit
       include DataRequirementsUtils
       title '200 response and JSON Bundle body for POST parameters url, identifier, and version in body and id in url'
       id 'library-data-requirements-04'
-      description 'returned repsonse has status code 200.'
+      description 'returned response has status code 200.'
       input :library_id, title: 'Library id'
       input :library_url, title: 'Library url'
       input :library_identifier, title: 'Library identifier'
