@@ -4,7 +4,7 @@ require 'json'
 require_relative '../utils/data_requirements_utils'
 
 module MeasureRepositoryServiceTestKit
-  # tests for Library $package service
+  # tests for $data-requirements operation for Library service
   # rubocop:disable Metrics/ClassLength
   class LibraryDataRequirements < Inferno::TestGroup
     title 'Library $data-requirements'
