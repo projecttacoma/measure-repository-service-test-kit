@@ -9,7 +9,10 @@ module MeasureRepositoryServiceTestKit
 
     def assert_dr_success
       assert_success(:library, 200)
-      assert(!resource.type.coding.find { |c| c.code == 'module-definition' }.nil?)
+      assert(resource.dataRequirement, 'No data requirement created.')
+      assert(!resource.type.coding.find do |c|
+               c.code == 'module-definition'
+             end.nil?, 'Resulting data requirements Library is not type module-definition')
     end
   end
 end
