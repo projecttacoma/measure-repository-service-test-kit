@@ -116,7 +116,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
     end
   end
 
-  describe 'Server successfully returns bundle on Library $package with identifier in body' do
+  describe 'Server successfully returns bundle on Library $cqfm.package with identifier in body' do
     let(:test) { group.tests[2] }
     let(:library_identifier) { 'identifier_system|identifier_value' }
 
@@ -163,7 +163,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryDataRequirements do
     end
   end
 
-  describe 'Server successfully returns bundle on Library $package with url, identifier, and version in body' do
+  describe 'Server successfully returns bundle on Library $cqfm.package with url, identifier, and version in body' do
     let(:test) { group.tests[3] }
     let(:library_id) { 'library_id' }
     let(:library_identifier) { 'identifier_system|identifier_value' }

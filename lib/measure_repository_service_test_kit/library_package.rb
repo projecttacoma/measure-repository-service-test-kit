@@ -5,14 +5,14 @@ require_relative '../utils/package_utils'
 require_relative '../utils/general_utils'
 
 module MeasureRepositoryServiceTestKit
-  # tests for Library $package service
+  # tests for Library $cqfm.package service
   # rubocop:disable Metrics/ClassLength
   class LibraryPackage < Inferno::TestGroup
     include PackageUtils
     include GeneralUtils
 
-    title 'Library $package'
-    description 'Ensure measure repository service can execute the $package operation to the Library endpoint'
+    title 'Library $cqfm.package'
+    description 'Ensure measure repository service can execute the $cqfm.package operation to the Library endpoint'
     id 'library_package'
     custom_headers = { 'content-type': 'application/fhir+json' }
 
@@ -28,7 +28,7 @@ module MeasureRepositoryServiceTestKit
       input :library_id, title: 'Library id'
       makes_request :library_package
       run do
-        fhir_operation("Library/#{library_id}/$package", name: :library_package)
+        fhir_operation("Library/#{library_id}/$cqfm.package", name: :library_package)
         assert_response_status(200)
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
@@ -54,7 +54,7 @@ module MeasureRepositoryServiceTestKit
 
         params = FHIR::Parameters.new params_hash
 
-        fhir_operation('Library/$package', body: params)
+        fhir_operation('Library/$cqfm.package', body: params)
         assert_response_status(200)
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
@@ -80,7 +80,7 @@ module MeasureRepositoryServiceTestKit
 
         params = FHIR::Parameters.new params_hash
 
-        fhir_operation('Library/$package', body: params)
+        fhir_operation('Library/$cqfm.package', body: params)
         assert_response_status(200)
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
@@ -114,7 +114,7 @@ module MeasureRepositoryServiceTestKit
 
         params = FHIR::Parameters.new params_hash
 
-        fhir_operation("Library/#{library_id}/$package", body: params)
+        fhir_operation("Library/#{library_id}/$cqfm.package", body: params)
         assert_response_status(200)
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
@@ -148,7 +148,7 @@ module MeasureRepositoryServiceTestKit
       description 'returns 404 status code with OperationOutcome when no Library exists with passed-in id'
 
       run do
-        fhir_operation('Library/INVALID_ID/$package')
+        fhir_operation('Library/INVALID_ID/$cqfm.package')
         assert_response_status(404)
         assert_valid_json(response[:body])
         assert(resource.resourceType == 'OperationOutcome')
@@ -162,7 +162,7 @@ module MeasureRepositoryServiceTestKit
       description 'returns 400 status code with OperationOutcome when no id, url, or identifier provided'
 
       run do
-        fhir_operation('Library/$package')
+        fhir_operation('Library/$cqfm.package')
         assert_response_status(400)
         assert_valid_json(response[:body])
         assert(resource.resourceType == 'OperationOutcome')
@@ -179,7 +179,7 @@ module MeasureRepositoryServiceTestKit
       input :library_id, title: 'Library id'
 
       run do
-        fhir_operation("Library/#{library_id}/$package?include-terminology=true")
+        fhir_operation("Library/#{library_id}/$cqfm.package?include-terminology=true")
         assert_response_status(200)
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])

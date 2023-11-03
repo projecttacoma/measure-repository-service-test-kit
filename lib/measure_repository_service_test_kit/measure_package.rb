@@ -5,14 +5,14 @@ require_relative '../utils/package_utils'
 require_relative '../utils/general_utils'
 
 module MeasureRepositoryServiceTestKit
-  # tests for Measure $package service
+  # tests for Measure $cqfm.package service
   # rubocop:disable Metrics/ClassLength
   class MeasurePackage < Inferno::TestGroup
     include PackageUtils
     include GeneralUtils
 
-    title 'Measure $package'
-    description 'Ensure measure repository service can execute the $package operation to the Measure endpoint'
+    title 'Measure $cqfm.package'
+    description 'Ensure measure repository service can execute the $cqfm.package operation to the Measure endpoint'
     id 'measure_package'
     custom_headers = { 'content-type': 'application/fhir+json' }
 
@@ -28,7 +28,7 @@ module MeasureRepositoryServiceTestKit
       input :measure_id, title: 'Measure id'
       makes_request :measure_package
       run do
-        fhir_operation("Measure/#{measure_id}/$package", name: :measure_package)
+        fhir_operation("Measure/#{measure_id}/$cqfm.package", name: :measure_package)
         assert_response_status(200)
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
@@ -54,7 +54,7 @@ module MeasureRepositoryServiceTestKit
 
         params = FHIR::Parameters.new params_hash
 
-        fhir_operation('Measure/$package', body: params)
+        fhir_operation('Measure/$cqfm.package', body: params)
         assert_response_status(200)
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
@@ -80,7 +80,7 @@ module MeasureRepositoryServiceTestKit
 
         params = FHIR::Parameters.new params_hash
 
-        fhir_operation('Measure/$package', body: params)
+        fhir_operation('Measure/$cqfm.package', body: params)
         assert_response_status(200)
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
@@ -119,7 +119,7 @@ module MeasureRepositoryServiceTestKit
 
         params = FHIR::Parameters.new params_hash
 
-        fhir_operation("Measure/#{measure_id}/$package", body: params)
+        fhir_operation("Measure/#{measure_id}/$cqfm.package", body: params)
         assert_response_status(200)
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
@@ -154,7 +154,7 @@ module MeasureRepositoryServiceTestKit
       description 'returns 404 status code with OperationOutcome when no Measure exists with passed-in id'
 
       run do
-        fhir_operation('Measure/INVALID_ID/$package')
+        fhir_operation('Measure/INVALID_ID/$cqfm.package')
         assert_response_status(404)
         assert_valid_json(response[:body])
         assert(resource.resourceType == 'OperationOutcome')
@@ -168,7 +168,7 @@ module MeasureRepositoryServiceTestKit
       description 'returns 400 status code with OperationOutcome when no id, url, or identifier provided'
 
       run do
-        fhir_operation('Measure/$package')
+        fhir_operation('Measure/$cqfm.package')
         assert_response_status(400)
         assert_valid_json(response[:body])
         assert(resource.resourceType == 'OperationOutcome')
@@ -185,7 +185,7 @@ module MeasureRepositoryServiceTestKit
       input :measure_id, title: 'Measure id'
 
       run do
-        fhir_operation("Measure/#{measure_id}/$package?include-terminology=true")
+        fhir_operation("Measure/#{measure_id}/$cqfm.package?include-terminology=true")
         assert_response_status(200)
         assert_resource_type(:bundle)
         assert_valid_json(response[:body])
