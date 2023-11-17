@@ -10,7 +10,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
   let(:url) { 'http://example.com/fhir' }
   let(:error_outcome) { FHIR::OperationOutcome.new(issue: [{ severity: 'error' }]) }
 
-  describe 'Server successfully returns bundle on Library $package with id in url' do
+  describe 'Server successfully returns bundle on Library $cqfm.package with id in url' do
     let(:test) { group.tests.first }
     let(:library_id) { 'library_id' }
 
@@ -19,7 +19,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package"
+        "#{url}/Library/#{library_id}/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_id:)
@@ -31,7 +31,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package"
+        "#{url}/Library/#{library_id}/$cqfm.package"
       ).to_return(status: 400, body: bundle.to_json)
 
       result = run(test, url:, library_id:)
@@ -42,7 +42,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       library = FHIR::Library.new(id: library_id)
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package"
+        "#{url}/Library/#{library_id}/$cqfm.package"
       ).to_return(status: 400, body: library.to_json)
 
       result = run(test, url:, library_id:)
@@ -54,7 +54,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package"
+        "#{url}/Library/#{library_id}/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_id:)
@@ -62,7 +62,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
     end
   end
 
-  describe 'Server successfully returns bundle on Measure $package with url in body' do
+  describe 'Server successfully returns bundle on Measure $cqfm.package with url in body' do
     let(:test) { group.tests[1] }
     let(:library_url) { 'library_url' }
 
@@ -72,7 +72,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
 
       stub_request(
         :post,
-        "#{url}/Library/$package"
+        "#{url}/Library/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
       result = run(test, url:, library_url:)
       expect(result.result).to eq('pass')
@@ -83,7 +83,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Library.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/$package"
+        "#{url}/Library/$cqfm.package"
       ).to_return(status: 400, body: bundle.to_json)
 
       result = run(test, url:, library_url:)
@@ -94,7 +94,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       library = FHIR::Library.new(url: library_url)
       stub_request(
         :post,
-        "#{url}/Library/$package"
+        "#{url}/Library/$cqfm.package"
       ).to_return(status: 400, body: library.to_json)
 
       result = run(test, url:, library_url:)
@@ -106,7 +106,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/$package"
+        "#{url}/Library/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_url:)
@@ -114,7 +114,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
     end
   end
 
-  describe 'Server successfully returns bundle on Library $package with identifier in body' do
+  describe 'Server successfully returns bundle on Library $cqfm.package with identifier in body' do
     let(:test) { group.tests[2] }
     let(:library_identifier) { 'identifier_system|identifier_value' }
     let(:expected_identifier) { { system: 'identifier_system', value: 'identifier_value' } }
@@ -124,7 +124,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/$package"
+        "#{url}/Library/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_identifier:)
@@ -136,7 +136,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/$package"
+        "#{url}/Library/$cqfm.package"
       ).to_return(status: 400, body: bundle.to_json)
 
       result = run(test, url:, library_identifier:)
@@ -147,7 +147,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       library = FHIR::Library.new(identifier: expected_identifier)
       stub_request(
         :post,
-        "#{url}/Library/$package"
+        "#{url}/Library/$cqfm.package"
       ).to_return(status: 400, body: library.to_json)
 
       result = run(test, url:, library_identifier:)
@@ -159,7 +159,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/$package"
+        "#{url}/Library/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_identifier:)
@@ -171,7 +171,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/$package"
+        "#{url}/Library/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_identifier:)
@@ -179,7 +179,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
     end
   end
 
-  describe 'Server successfully returns bundle on Library $package with url, identifier, and version in body' do
+  describe 'Server successfully returns bundle on Library $cqfm.package with url, identifier, and version in body' do
     let(:test) { group.tests[3] }
     let(:library_id) { 'library_id' }
     let(:library_identifier) { 'identifier_system|identifier_value' }
@@ -193,7 +193,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package"
+        "#{url}/Library/#{library_id}/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_id:, library_url:, library_identifier:, library_version:)
@@ -206,7 +206,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package"
+        "#{url}/Library/#{library_id}/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_id:, library_url:, library_identifier:, library_version:)
@@ -219,7 +219,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package"
+        "#{url}/Library/#{library_id}/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_id:, library_url:, library_identifier:, library_version:)
@@ -232,7 +232,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package"
+        "#{url}/Library/#{library_id}/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_id:, library_url:, library_identifier:, library_version:)
@@ -246,7 +246,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package"
+        "#{url}/Library/#{library_id}/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_id:, library_url:, library_identifier:, library_version:)
@@ -260,7 +260,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new(total: 1, entry: [{ resource: library }])
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package"
+        "#{url}/Library/#{library_id}/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_id:, library_url:, library_identifier:, library_version:)
@@ -281,7 +281,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       repo_create(
         :request,
         name: 'library_package',
-        url: "http://example.com/Library/#{library_id}/$package",
+        url: "http://example.com/Library/#{library_id}/$cqfm.package",
         test_session_id: test_session.id,
         status: 200,
         response_body: bundle.to_json
@@ -296,7 +296,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       repo_create(
         :request,
         name: 'library_package',
-        url: "http://example.com/Library/#{library_id}/$package",
+        url: "http://example.com/Library/#{library_id}/$cqfm.package",
         test_session_id: test_session.id,
         status: 200,
         response_body: bundle.to_json
@@ -319,7 +319,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
     it 'passses when 404 returned with OperationOutcome' do
       stub_request(
         :post,
-        "#{url}/Library/INVALID_ID/$package"
+        "#{url}/Library/INVALID_ID/$cqfm.package"
       ).to_return(status: 404, body: error_outcome.to_json)
 
       result = run(test, url:)
@@ -329,7 +329,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
     it 'fails if 200 status code returned' do
       stub_request(
         :post,
-        "#{url}/Library/INVALID_ID/$package"
+        "#{url}/Library/INVALID_ID/$cqfm.package"
       ).to_return(status: 200, body: error_outcome.to_json)
 
       result = run(test, url:)
@@ -340,7 +340,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new
       stub_request(
         :post,
-        "#{url}/Library/INVALID_ID/$package"
+        "#{url}/Library/INVALID_ID/$cqfm.package"
       ).to_return(status: 200, body: bundle.to_json)
       result = run(test, url:)
       expect(result.result).to eq('fail')
@@ -354,7 +354,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
     it 'passes when 400 returned with OperationOutcome' do
       stub_request(
         :post,
-        "#{url}/Library/$package"
+        "#{url}/Library/$cqfm.package"
       ).to_return(status: 400, body: error_outcome.to_json)
       result = run(test, url:)
       expect(result.result).to eq('pass')
@@ -363,7 +363,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
     it 'fails if 200 status code returned' do
       stub_request(
         :post,
-        "#{url}/Library/$package"
+        "#{url}/Library/$cqfm.package"
       ).to_return(status: 200, body: error_outcome.to_json)
       result = run(test, url:)
       expect(result.result).to eq('fail')
@@ -373,7 +373,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
       bundle = FHIR::Bundle.new
       stub_request(
         :post,
-        "#{url}/Library/$package"
+        "#{url}/Library/$cqfm.package"
       ).to_return(status: 400, body: bundle.to_json)
       result = run(test, url:)
       expect(result.result).to eq('fail')
@@ -399,7 +399,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
                                         { resource: dep_library }, { resource: dep_valueset }])
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package?include-terminology=true"
+        "#{url}/Library/#{library_id}/$cqfm.package?include-terminology=true"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_id:)
@@ -412,7 +412,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
                                         { resource: dep_library }])
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package?include-terminology=true"
+        "#{url}/Library/#{library_id}/$cqfm.package?include-terminology=true"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_id:)
@@ -424,7 +424,7 @@ RSpec.describe MeasureRepositoryServiceTestKit::LibraryPackage do
                                 entry: [{ resource: library }, { resource: dep_valueset }])
       stub_request(
         :post,
-        "#{url}/Library/#{library_id}/$package?include-terminology=true"
+        "#{url}/Library/#{library_id}/$cqfm.package?include-terminology=true"
       ).to_return(status: 200, body: bundle.to_json)
 
       result = run(test, url:, library_id:)

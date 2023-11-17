@@ -3,7 +3,7 @@
 require 'set'
 
 module MeasureRepositoryServiceTestKit
-  # Utility functions in support of the $package test group
+  # Utility functions in support of the $cqfm.package test group
   module PackageUtils
     def related_artifacts_present?(bundle, should_check_valuesets)
       artifact_urls = Set[]
